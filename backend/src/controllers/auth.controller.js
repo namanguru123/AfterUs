@@ -1,6 +1,11 @@
 import bcrypt from 'bcryptjs'
 import User from '../models/User.js'
 import { generateToken } from '../utils/token.js'
+import crypto from "crypto";
+import sendEmail from "../utils/sendEmail.js";
+
+
+
 
 export const register = async (req, res) => {
   try {
@@ -23,7 +28,33 @@ export const register = async (req, res) => {
       password: hashedPassword
     })
 
-    return res.status(201).json({
+   
+
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
+    user.emailVerificationToken = crypto
+      .createHash("sha256")
+      .update(verificationToken)
+      .digest("hex");
+
+    user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000; // 24h
+
+    await user.save();
+    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+    await sendEmail({
+        to: user.email,
+        subject: "Verify your AfterUs account",
+        html: `
+          <h2>Welcome to AfterUs</h2>
+          <p>Please verify your email to activate your account.</p>
+          <a href="${verificationUrl}">Verify Email</a>
+          <p>This link expires in 24 hours.</p>
+        `,
+    });
+
+
+     return res.status(201).json({
       message: 'User registered successfully'
     })
   } catch (error) {
@@ -40,6 +71,13 @@ export const login = async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' })
     }
+
+    if (!user.isVerified) {
+      return res.status(403).json({
+        message: "Please verify your email before logging in",
+      });
+    }
+
 
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
@@ -65,3 +103,90 @@ export const login = async (req, res) => {
 export const getMe = async (req, res) => {
   return res.status(200).json(req.user)
 }
+
+
+
+export const verifyEmail = async (req, res) => {
+  try {
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    const user = await User.findOne({
+      emailVerificationToken: hashedToken,
+      emailVerificationExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid or expired verification link",
+      });
+    }
+
+    user.isVerified = true;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpires = undefined;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Email verification failed",
+    });
+  }
+};
+
+export const resendVerificationEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "Account is already verified",
+      });
+    }
+
+    // Generate new token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
+    user.emailVerificationToken = crypto
+      .createHash("sha256")
+      .update(verificationToken)
+      .digest("hex");
+
+    user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
+
+    await user.save();
+
+    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+    await sendEmail({
+      to: user.email,
+      subject: "Verify your AfterUs account",
+      html: `
+        <h2>Verify your email</h2>
+        <p>Please click the link below to verify your account:</p>
+        <a href="${verifyUrl}">Verify Email</a>
+        <p>This link expires in 24 hours.</p>
+      `,
+    });
+
+    res.status(200).json({
+      message: "Verification email resent",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to resend verification email",
+    });
+  }
+};
