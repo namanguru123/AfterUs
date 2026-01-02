@@ -7,22 +7,17 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const token = localStorage.getItem("token");
-
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+
       if (!token) {
         setLoading(false);
         return;
       }
 
       try {
-        const res = await api.get("/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        const res = await api.get("/auth/me");
         setUser(res.data);
       } catch (err) {
         console.error("Auth error:", err);
@@ -34,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchUser();
-  }, [token]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>

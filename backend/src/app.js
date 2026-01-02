@@ -9,6 +9,8 @@ import authRoutes from "./routes/auth.routes.js";
 import assetRoutes from "./routes/asset.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import activityRoutes from "./routes/activity.routes.js";
+import trustedPeopleRoutes from "./routes/trustedPeople.routes.js";
+import conditionRoutes from "./routes/condition.routes.js";
 
 dotenv.config();
 
@@ -40,6 +42,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/activity", activityRoutes);
 app.use("/api/assets", assetRoutes);
+app.use("/api/trusted-people", trustedPeopleRoutes);
+app.use("/api/conditions", conditionRoutes);
+
+
 
 app.get("/", (req, res) => {
   res.json({

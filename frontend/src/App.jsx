@@ -16,6 +16,7 @@ import TrustedPeople from "./pages/dashboard/TrustedPeople";
 import Conditions from "./pages/dashboard/Conditions";
 import ActivityLogs from "./pages/dashboard/ActivityLogs";
 import Settings from "./pages/dashboard/Settings";
+import VerifyTrusted from "./pages/dashboard/VerifyTrusted";
 
 import ProtectedRoute from "./context/ProtectedRoute";
 
@@ -52,6 +53,7 @@ export default function App() {
 
           {/* Other Dashboard Pages */}
           <Route path="people" element={<TrustedPeople />} />
+          <Route path="verify-trusted" element={<VerifyTrusted />} />
           <Route path="conditions" element={<Conditions />} />
           <Route path="activity" element={<ActivityLogs />} />
           <Route path="settings" element={<Settings />} />

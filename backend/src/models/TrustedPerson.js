@@ -1,4 +1,4 @@
-import mongoose from "mongoose";    
+import mongoose from "mongoose";
 
 const trustedPersonSchema = new mongoose.Schema(
   {
@@ -8,19 +8,44 @@ const trustedPersonSchema = new mongoose.Schema(
       required: true,
     },
 
-    name: String,
-    email: String,
-
-    permissions: {
-      read: Boolean,
-      act: Boolean,
-      notify: Boolean,
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
 
-    verified: {
+    email: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    relation: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    status: {
+      type: String,
+      enum: ["PENDING", "VERIFIED"],
+      default: "PENDING",
+    },
+
+    isDeleted: {
       type: Boolean,
       default: false,
     },
+
+    verificationToken: {
+      type: String,
+    },
+    
+    verificationExpires: {
+      type: Date,
+    },
+
   },
   { timestamps: true }
 );

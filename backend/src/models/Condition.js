@@ -6,21 +6,54 @@ const conditionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
 
     type: {
-      type: String, // TIME_BASED, MULTI_PARTY, MANUAL
+      type: String,
+      enum: ["INACTIVITY", "MANUAL", "TIME_BASED"],
       required: true,
     },
 
-    active: {
-      type: Boolean,
-      default: true,
+    status: {
+      type: String,
+      enum: ["ACTIVE", "PAUSED", "TRIGGERED"],
+      default: "ACTIVE",
     },
 
-    triggerRule: String,
+    config: {
+      type: Object,
+      required: true,
+    },
+
+    linkedAssets: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "DigitalAsset",
+      },
+    ],
+
+    trustedPeople: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "TrustedPerson",
+      },
+    ],
+
+    lastCheckedAt: {
+      type: Date,
+    },
+
+    triggeredAt: {
+      type: Date,
+    },
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
-export default  mongoose.model("Condition", conditionSchema);
+export default mongoose.model("Condition", conditionSchema);
