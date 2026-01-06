@@ -13,21 +13,18 @@ export const createCondition = async (req, res) => {
       return res.status(400).json({ message: "Invalid condition type" });
     }
 
-    if (type === "INACTIVITY") {
-      if (
-        typeof config.inactivityDays !== "number" ||
-        config.inactivityDays < 1
-      ) {
-        return res.status(400).json({
-          message: "Invalid inactivityDays",
-        });
-      }
+    if (
+      type === "INACTIVITY" &&
+      typeof config.inactivityDays !== "number"
+    ) {
+      return res
+        .status(400)
+        .json({ message: "inactivityDays must be a number" });
     }
 
     const condition = await Condition.create({
       owner: req.user.id,
       type,
-      status: "ACTIVE",
       config,
       linkedAssets,
       trustedPeople,
@@ -36,15 +33,15 @@ export const createCondition = async (req, res) => {
     await logActivity(req.user.id, {
       type: "CONDITION_CREATED",
       title: "Condition created",
-      description: `New ${type.toLowerCase()} condition created`,
+      description: `${type} condition created`,
     });
 
     res.status(201).json(condition);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Failed to create condition" });
   }
 };
+
 
 
 export const getMyConditions = async (req, res) => {
@@ -144,3 +141,100 @@ export const triggerConditionManually = async (req, res) => {
   res.json({ message: "Condition triggered" });
 };
 
+export const getConditionById = async (req, res) => {
+  const condition = await Condition.findOne({
+    _id: req.params.id,
+    owner: req.user.id,
+    isDeleted: false,
+  })
+    .populate("linkedAssets", "title")
+    .populate("trustedPeople", "name email status");
+
+  if (!condition) {
+    return res.status(404).json({ message: "Condition not found" });
+  }
+
+  console.log("BACKEND CONDITION:", condition);
+
+  res.json(condition);
+};
+
+
+export const updateConditionAssets = async (req, res) => {
+  try {
+    const { assets } = req.body;
+
+    if (!Array.isArray(assets)) {
+      return res.status(400).json({ message: "Assets must be an array" });
+    }
+
+    
+
+    const condition = await Condition.findOne({
+      _id: req.params.id,
+      owner: req.user.id,
+      isDeleted: false,
+    })
+    .populate("linkedAssets", "title")
+    .populate("trustedPeople", "name email status");
+
+
+    if (!condition) {
+      return res.status(404).json({ message: "Condition not found" });
+    }
+
+    condition.linkedAssets = assets;
+    await condition.save();
+
+    await logActivity(req.user.id, {
+      type: "CONDITION_UPDATED",
+      title: "Assets linked to condition",
+      description: `Assets updated for ${condition.type} condition`,
+    });
+
+    res.json(condition);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update assets" });
+  }
+};
+
+export const updateConditionTrustedPeople = async (req, res) => {
+  try {
+    const { trustedPeople } = req.body;
+
+    if (!Array.isArray(trustedPeople)) {
+      return res.status(400).json({
+        message: "trustedPeople must be an array",
+      });
+    }
+
+    const condition = await Condition.findOne({
+      _id: req.params.id,
+      owner: req.user.id,
+      isDeleted: false,
+    });
+
+    if (!condition) {
+      return res.status(404).json({ message: "Condition not found" });
+    }
+
+    condition.trustedPeople = trustedPeople;
+    await condition.save();
+
+    await logActivity(req.user.id, {
+      type: "CONDITION_UPDATED",
+      title: "Trusted people updated",
+      description: "Trusted people linked to condition",
+    });
+
+    res.json({
+      message: "Trusted people updated successfully",
+      trustedPeople: condition.trustedPeople,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Failed to update trusted people",
+    });
+  }
+};

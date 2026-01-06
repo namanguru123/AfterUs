@@ -20,7 +20,7 @@ const navItems = [
 
 const Sidebar = () => {
   return (
-    <aside className="w-80 min-h-screen flex-shrink-0 bg-gradient-to-b from-[#0B1220] to-[#060B16] text-white flex flex-col">
+    <aside className="w-80 min-h-screen flex-shrink-1 bg-gradient-to-b from-[#0B1220] to-[#060B16] text-white flex flex-col">
       
       {/* Brand */}
       <div className="px-6 py-6 border-b border-white/10">

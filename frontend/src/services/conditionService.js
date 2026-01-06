@@ -24,3 +24,23 @@ export const deleteCondition = async (id) => {
   const res = await api.delete(`/conditions/${id}`);
   return res.data;
 };
+
+export const getConditionById = async (id) => {
+  const res = await api.get(`/conditions/${id}`);
+  return res.data;
+};
+
+
+export const updateConditionAssets = async (id, assets) => {
+  const res = await api.patch(`/conditions/${id}/assets`, {
+    assets,
+  });
+  return res.data;
+};
+
+
+export const updateConditionTrustedPeople = (conditionId, trustedPeople) => {
+  return api.patch(`/conditions/${conditionId}/trusted-people`, {
+    trustedPeople,
+  });
+};

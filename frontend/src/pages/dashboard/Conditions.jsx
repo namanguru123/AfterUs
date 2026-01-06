@@ -6,6 +6,8 @@ import {
   createInactivityCondition,
 } from "../../services/conditionService";
 
+import { Link } from "react-router-dom";
+
 export default function Conditions() {
   const [conditions, setConditions] = useState([]);
   const [days, setDays] = useState("");
@@ -68,11 +70,21 @@ export default function Conditions() {
           className="bg-white border rounded-xl p-5 flex justify-between items-center"
         >
           <div>
-            <p className="font-medium">{c.type.replace("_", " ")}</p>
+            
+
+            <Link
+              to={`/dashboard/conditions/${c._id}`}
+              className="font-medium text-indigo-600 hover:underline"
+            >
+              {c.type.replace("_", " ")}
+            </Link>
+
             <p className="text-sm text-slate-500">
               Status: {c.status}
             </p>
           </div>
+
+          
 
           <div className="flex gap-3">
             <button

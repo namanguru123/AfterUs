@@ -21,9 +21,13 @@ app.use(helmet());
 app.use(
   cors({
     origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+
+
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -31,7 +35,10 @@ const limiter = rateLimit({
   message: "Too many requests. Please try again later.",
 });
 
-app.use(limiter);
+if (process.env.NODE_ENV === "production") {
+  app.use(limiter);
+}
+
 app.use(express.json({ limit: "10kb" }));
 
 if (process.env.NODE_ENV === "development") {

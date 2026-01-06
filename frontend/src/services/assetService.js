@@ -9,6 +9,7 @@ export const createAsset = async (assetData) => {
 // Get assets
 export const getAssets = async () => {
   const res = await api.get("/assets");
+  console.log("Fetched assets:", res.data);
   return res.data;
 };
 

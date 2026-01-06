@@ -16,7 +16,6 @@ export const logActivity = async ({
       message,
     });
   } catch (err) {
-    // Logging should NEVER break main flow
     console.error("Activity log failed:", err.message);
   }
 };
