@@ -1,4 +1,5 @@
 import TrustedPerson from "../models/TrustedPerson.js";
+import User from "../models/User.js";
 import { logActivity } from "../utils/activityLogger.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
@@ -18,6 +19,7 @@ export const addTrustedPerson = async (req, res) => {
       name,
       email,
       relation,
+      status: "PENDING",
       verificationToken,
       verificationExpires: Date.now() + 24 * 60 * 60 * 1000,
     });
@@ -110,7 +112,16 @@ export const verifyTrustedPersonByToken = async (req, res) => {
       return res.status(400).send("Verification link expired or invalid");
     }
 
+    const user = await User.findOne({ email: person.email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .send("No user account found with this email");
+    }
+
     person.status = "VERIFIED";
+    person.userId = user._id;
     person.verificationToken = null;
     person.verificationExpires = null;
 

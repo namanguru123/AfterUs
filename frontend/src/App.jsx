@@ -19,6 +19,9 @@ import Settings from "./pages/dashboard/Settings";
 import VerifyTrusted from "./pages/dashboard/VerifyTrusted";
 import ConditionDetails from "./pages/dashboard/ConditionDetails";
 
+import SharedWithMe from "./pages/SharedWithMe";
+import SharedAssetView from "./pages/SharedAssetView";
+
 import ProtectedRoute from "./context/ProtectedRoute";
 
 import "./styles/buttons.css";
@@ -52,14 +55,21 @@ export default function App() {
           <Route path="assets/:id" element={<AssetDetails />} />
           <Route path="assets/:id/edit" element={<EditAsset />} />
 
-          {/* Other Dashboard Pages */}
+          {/* Trusted People */}
           <Route path="people" element={<TrustedPeople />} />
           <Route path="verify-trusted" element={<VerifyTrusted />} />
-          <Route path="conditions" element={<Conditions />} />
-          <Route path="/dashboard/conditions/:id" element={<ConditionDetails />} />
 
+          {/* Conditions */}
+          <Route path="conditions" element={<Conditions />} />
+          <Route path="conditions/:id" element={<ConditionDetails />} />
+
+          {/* Activity & Settings */}
           <Route path="activity" element={<ActivityLogs />} />
           <Route path="settings" element={<Settings />} />
+
+          {/* Shared Access */}
+          <Route path="shared-with-me" element={<SharedWithMe />} />
+          <Route path="shared/:id" element={<SharedAssetView />} />
         </Route>
 
         {/* 🌐 Public Routes */}

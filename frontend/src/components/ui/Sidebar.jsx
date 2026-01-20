@@ -16,6 +16,7 @@ const navItems = [
   { name: "Conditions", path: "/dashboard/conditions", icon: Clock },
   { name: "Activity Log", path: "/dashboard/activity", icon: Activity },
   { name: "Settings", path: "/dashboard/settings", icon: Settings },
+  { name: "Shared With Me", path: "/dashboard/shared-with-me", icon: Users },
 ];
 
 const Sidebar = () => {
@@ -36,14 +37,14 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-6 space-y-2 flex-col">
+      <nav className="flex-1 px-3 py-6 space-y-1 flex-col">
         {navItems.map(({ name, path, icon: Icon }) => (
             <NavLink
               key={name}
               to={path}
               end={path === "/dashboard"}
               className={({ isActive }) =>
-                `flex items-center gap-3 h-10 px-4 mx-1 rounded-xl whitespace-nowrap transition-all
+                `flex items-center gap-3 h-8 px-4 mx-1 rounded-xl whitespace-nowrap transition-all
                 ${
                   isActive
                     ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg"

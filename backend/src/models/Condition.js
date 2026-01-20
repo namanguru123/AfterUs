@@ -15,15 +15,26 @@ const conditionSchema = new mongoose.Schema(
       required: true,
     },
 
-    status: {
+    lifecycleStatus: {
       type: String,
-      enum: ["ACTIVE", "PAUSED", "TRIGGERED"],
+      enum: ["ACTIVE", "PAUSED"],
       default: "ACTIVE",
+    },
+
+    executionStatus: {
+      type: String,
+      enum: ["PENDING", "FULFILLED"],
+      default: "PENDING",
     },
 
     config: {
       type: Object,
       required: true,
+    },
+
+
+    fulfilledAt: {
+      type: Date,
     },
 
     linkedAssets: [

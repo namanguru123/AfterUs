@@ -7,6 +7,7 @@ import {
 } from "../../services/conditionService";
 import { getAssets } from "../../services/assetService";
 import { getTrustedPeople } from "../../services/trustedPeopleService";
+import api from "../../services/api";
 
 export default function ConditionDetails() {
   const { id } = useParams();
@@ -22,33 +23,49 @@ export default function ConditionDetails() {
   const [savingAssets, setSavingAssets] = useState(false);
   const [savingPeople, setSavingPeople] = useState(false);
 
+  // ✅ EXTRACTED FUNCTION (this was missing earlier)
+  const fetchConditionDetails = async () => {
+    setLoading(true);
+
+    const conditionRes = await getConditionById(id);
+    const assetsRes = await getAssets();
+    const peopleRes = await getTrustedPeople();
+
+    setCondition(conditionRes);
+    setAssets(Array.isArray(assetsRes) ? assetsRes : []);
+    setTrustedPeople(Array.isArray(peopleRes) ? peopleRes : []);
+
+    setSelectedAssets(
+      (conditionRes.linkedAssets || [])
+        .map(a => a?._id?.toString())
+        .filter(Boolean)
+    );
+
+    setSelectedTrustedPeople(
+      (conditionRes.trustedPeople || [])
+        .map(p => p?._id?.toString())
+        .filter(Boolean)
+    );
+
+    setLoading(false);
+  };
+
+  // ✅ useEffect now calls the same function
   useEffect(() => {
-    const load = async () => {
-      const conditionRes = await getConditionById(id);
-      const assetsRes = await getAssets();
-      const peopleRes = await getTrustedPeople();
-
-      setCondition(conditionRes);
-      setAssets(Array.isArray(assetsRes) ? assetsRes : []);
-      setTrustedPeople(Array.isArray(peopleRes) ? peopleRes : []);
-
-      setSelectedAssets(
-        (conditionRes.linkedAssets || [])
-          .map(a => a?._id?.toString())
-          .filter(Boolean)
-      );
-
-      setSelectedTrustedPeople(
-        (conditionRes.trustedPeople || [])
-          .map(p => p?._id?.toString())
-          .filter(Boolean)
-      );
-
-      setLoading(false);
-    };
-
-    load();
+    fetchConditionDetails();
   }, [id]);
+
+  // ✅ Trigger condition (now works correctly)
+  const handleTriggerCondition = async () => {
+    try {
+      await api.post(`/conditions/${condition._id}/trigger`);
+      alert("Condition triggered successfully");
+      fetchConditionDetails(); // ✅ now defined
+    } catch (error) {
+      console.error(error);
+      alert("Failed to trigger condition");
+    }
+  };
 
   if (loading) return <p>Loading...</p>;
   if (!condition) return <p>Condition not found</p>;
@@ -61,6 +78,16 @@ export default function ConditionDetails() {
         <p><strong>Type:</strong> {condition.type}</p>
         <p><strong>Status:</strong> {condition.status}</p>
         <p><strong>Inactivity Days:</strong> {condition.config?.inactivityDays}</p>
+
+        {condition.executionStatus !== "FULFILLED" && (
+          <button
+            onClick={handleTriggerCondition}
+            className="bg-red-600 text-white px-4 py-2 rounded mt-4"
+          >
+            Trigger Condition
+          </button>
+        )}
+
       </div>
 
       <div className="bg-white border rounded-xl p-5">

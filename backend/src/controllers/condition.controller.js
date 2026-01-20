@@ -1,5 +1,8 @@
 import Condition from "../models/Condition.js";
 import { logActivity } from "../utils/activityLogger.js";
+import AccessRule from "../models/AccessRule.js";
+import TrustedPerson from "../models/TrustedPerson.js";
+import ActivityLog from "../models/ActivityLog.js";
 
 export const createCondition = async (req, res) => {
   try {
@@ -116,30 +119,6 @@ export const deleteCondition = async (req, res) => {
   }
 };
 
-export const triggerConditionManually = async (req, res) => {
-  const condition = await Condition.findOne({
-    _id: req.params.id,
-    owner: req.user.id,
-    status: "ACTIVE",
-    isDeleted: false,
-  });
-
-  if (!condition || condition.type !== "MANUAL") {
-    return res.status(400).json({ message: "Invalid manual condition" });
-  }
-
-  condition.status = "TRIGGERED";
-  condition.triggeredAt = new Date();
-  await condition.save();
-
-  await logActivity(req.user.id, {
-    type: "CONDITION_TRIGGERED",
-    title: "Emergency condition triggered",
-    description: "Manual emergency condition activated",
-  });
-
-  res.json({ message: "Condition triggered" });
-};
 
 export const getConditionById = async (req, res) => {
   const condition = await Condition.findOne({
@@ -238,3 +217,192 @@ export const updateConditionTrustedPeople = async (req, res) => {
     });
   }
 };
+
+
+
+
+export const triggerCondition = async (req, res) => {
+  try {
+    const conditionId = req.params.id;
+
+    const condition = await Condition.findOne({
+      _id: conditionId,
+      owner: req.user.id,
+      isDeleted: false,
+    })
+      .populate("linkedAssets")
+      .populate("trustedPeople");
+
+    if (!condition) {
+      return res.status(404).json({ message: "Condition not found" });
+    }
+
+    // 🛑 GUARD: already fulfilled
+    if (condition.executionStatus === "FULFILLED") {
+      return res.status(400).json({
+        message: "Condition already fulfilled",
+      });
+    }
+
+    // 🛑 VALIDATION (NO STATE CHANGE YET)
+    if (
+      condition.type === "INACTIVITY" &&
+      !condition.config?.inactivityDays
+    ) {
+      return res.status(400).json({
+        message: "Inactivity days not configured",
+      });
+    }
+
+    if (
+      !condition.linkedAssets.length ||
+      !condition.trustedPeople.length
+    ) {
+      return res.status(400).json({
+        message: "Assets or trusted people not linked",
+      });
+    }
+
+    // 🔐 CREATE ACCESS RULES
+    const accessRules = [];
+
+    for (const asset of condition.linkedAssets) {
+      for (const person of condition.trustedPeople) {
+        accessRules.push({
+          owner: condition.owner,
+          trustedContact: person.userId, // ✅ matches your AccessRule mapping
+          asset: asset._id,
+          condition: condition._id,
+          status: "ACTIVE",
+        });
+      }
+    }
+
+    await AccessRule.insertMany(accessRules);
+
+    // 🧾 ACTIVITY LOG
+    await ActivityLog.create({
+      owner: condition.owner,
+      action: "ASSET_UPDATED",
+      entityType: "ASSET",
+      entityId: condition._id,
+      message: `Condition "${condition.type}" was fulfilled`,
+    });
+
+    // ✅ COMMIT — THIS IS THE ONLY STATE CHANGE
+    condition.executionStatus = "FULFILLED";
+    condition.triggeredAt = new Date();
+    await condition.save();
+
+    return res.json({
+      message: "Condition fulfilled successfully",
+    });
+  } catch (error) {
+    console.error("TRIGGER CONDITION ERROR:", error);
+    return res.status(500).json({
+      message: "Failed to trigger condition",
+    });
+  }
+};
+
+
+
+// export const triggerCondition = async (req, res) => {
+//   try {
+//     if (condition.status === "FULFILLED") {
+//       return res.status(400).json({
+//         message: "Condition already triggered",
+//       });
+//     }
+
+
+//     const { id } = req.params;
+
+
+//     const condition = await Condition.findOne({
+//       _id: id,
+//       owner: req.user.id,
+//       isDeleted: false,
+//     });
+
+//     if (!condition) {
+//       return res.status(404).json({ message: "Condition not found" });
+//     }
+
+//     if (condition.executionStatus === "FULFILLED") {
+//       return res.status(400).json({ message: "Condition already fulfilled" });
+//     }
+
+//     if (condition.lifecycleStatus !== "ACTIVE") {
+//       return res.status(400).json({ message: "Condition is not active" });
+//     }
+
+
+    
+
+ 
+//     // const trustedPeople = await TrustedPerson.find({
+//     //   _id: { $in: condition.trustedPeople },
+//     //   isVerified: true,
+//     // });
+
+//     const trustedPeople = await TrustedPerson.find({
+//       _id: { $in: condition.trustedPeople },
+//       status: "VERIFIED",
+//     });
+
+
+//     if (
+//       condition.type === "INACTIVITY" &&
+//       !condition.config?.inactivityDays
+//     ) {
+//       return res.status(400).json({
+//         message: "Inactivity days not configured",
+//       });
+//     }
+
+
+
+//     const accessRules = [];
+
+
+//     for (const assetId of condition.linkedAssets) {
+//       for (const person of trustedPeople) {
+//         if (!person._id) continue;
+
+//         console.log(person);
+//         accessRules.push({
+//           owner: condition.owner,
+//           condition: condition._id,
+//           asset: assetId,
+//           trustedContact: person.userId, 
+//           status: "ACTIVE",
+//           activatedAt: new Date(),
+//         });
+//       }
+//     }
+
+//     console.log("Access Rules to be created:", accessRules);
+
+//     if (accessRules.length > 0) {
+//       await AccessRule.insertMany(accessRules);
+//     }
+
+//     condition.executionStatus = "FULFILLED";
+//     condition.fulfilledAt = new Date();
+//     await condition.save();
+
+//     return res.json({
+//       message: "Condition triggered successfully",
+//       conditionId: condition._id,
+//       accessRulesCreated: accessRules.length,
+//     });
+
+//   } catch (error) {
+//     console.error("Trigger condition error:", error);
+//     return res.status(500).json({
+//       message: "Failed to trigger condition",
+//     });
+//   }
+// };
+

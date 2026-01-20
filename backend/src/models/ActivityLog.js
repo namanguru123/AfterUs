@@ -15,6 +15,7 @@ const activityLogSchema = new mongoose.Schema(
         "ASSET_CREATED",
         "ASSET_UPDATED",
         "ASSET_DELETED",
+        "SENSITIVE_DATA_REVEALED",
       ],
     },
 

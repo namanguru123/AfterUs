@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
 import api from "../services/api";
+import { ArrowLeft } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -57,6 +58,9 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center px-4">
+      <Link to="/" className="absolute top-6 left-6 text-gray-600 hover:text-gray-800">
+        <ArrowLeft />
+      </Link>
       <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl p-8">
         <h1 className="text-3xl font-serif mb-2">Welcome back</h1>
         <p className="text-slate-500 mb-6">

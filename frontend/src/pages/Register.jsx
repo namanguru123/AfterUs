@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../services/authService";
 import { saveAuth } from "../utils/auth";
+import { ArrowLeft } from "lucide-react";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -53,6 +54,9 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center px-4">
+      <Link to="/" className="absolute top-6 left-6 text-gray-600 hover:text-gray-800">
+        <ArrowLeft />
+      </Link>
       {/* Background glow */}
       <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-indigo-200/30 rounded-full blur-3xl -z-10" />
 
