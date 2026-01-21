@@ -47,6 +47,12 @@ const accessRuleSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    revealCount: {
+      type: Number,
+      default: 0,
+    },
+
   },
   { timestamps: true }
 );

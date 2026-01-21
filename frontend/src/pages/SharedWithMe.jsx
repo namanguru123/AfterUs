@@ -31,6 +31,13 @@ export default function SharedWithMe() {
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">Shared With Me</h1>
 
+      {assets.length === 0 && (
+        <div className="mt-10 text-center text-sm text-gray-500">
+          No assets have been shared with you yet.
+        </div>
+      )}
+
+
       {assets.map(asset => (
         <div
           key={asset.accessRuleId}

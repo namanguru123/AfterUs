@@ -72,13 +72,26 @@ export default function SharedAssetView() {
           This asset is shared in read-only mode.
         </p>
 
-        <button
+        {/* <button
           onClick={revealSensitiveData}
           disabled={revealLoading}
           className="px-4 py-2 bg-black text-white rounded"
         >
           {revealLoading ? "Revealing..." : "Reveal Sensitive Data"}
+        </button> */}
+
+        <button
+          onClick={revealSensitiveData}
+          disabled={!!sensitiveData}
+          className={`mt-4 px-4 py-2 rounded ${
+            sensitiveData
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-blue-600 text-white"
+          }`}
+        >
+          {revealLoading ? "Revealing..." : "Reveal Sensitive Data"}
         </button>
+        <p className="mt-4">You can only view the sensitive data 3 times.</p>
       </div>
 
       {/* 🔓 Sensitive Data */}

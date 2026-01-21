@@ -34,7 +34,23 @@ export const revealSensitiveData = async (req, res) => {
       return res.status(404).json({ message: "Asset not found" });
     }
 
+    if (typeof rule.revealCount !== "number") {
+      rule.revealCount = 0;
+    }
+
+
+    if (rule.revealCount >= 3) {
+      return res.status(403).json({
+        message: "Sensitive data already revealed",
+      });
+    }
+
+
     const value = decrypt(asset.encryptedData);
+
+    rule.revealCount += 1;
+    await rule.save();
+
 
     await ActivityLog.create({
       owner: trustedPerson.owner,          
