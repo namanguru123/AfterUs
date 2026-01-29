@@ -14,6 +14,10 @@ export default function TrustedPeople() {
   });
   const [loading, setLoading] = useState(false);
 
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+
   const loadPeople = async () => {
     const data = await getTrustedPeople();
     setPeople(data);
@@ -32,10 +36,19 @@ export default function TrustedPeople() {
     setLoading(true);
 
     try {
+
+      setError("");
+      setMessage("");
+
       await addTrustedPerson(form);
       setForm({ name: "", email: "", relation: "" });
       loadPeople();
-    } finally {
+      setMessage("Trusted person added successfully");
+    }
+      catch (err) {
+      setError(err.response?.data?.message || "Failed to add trusted person");
+    } 
+    finally {
       setLoading(false);
     }
   };
@@ -52,6 +65,8 @@ export default function TrustedPeople() {
         <h2 className="text-xl font-semibold mb-4">
           Add Trusted Person
         </h2>
+
+
 
         <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <input
@@ -86,7 +101,18 @@ export default function TrustedPeople() {
           >
             Add
           </button>
+
+          
+
         </form>
+
+        {message && (
+            <p className="text-green-600 text-sm mt-2">{message}</p>
+          )}
+
+          {error && (
+            <p className="text-red-600 text-sm mt-2">{error}</p>
+          )}
       </div>
 
       <div className="bg-white border border-slate-200 rounded-xl p-6">

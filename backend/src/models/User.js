@@ -18,6 +18,16 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
+    assetCount: {
+      type: Number,
+      default: 0,
+    },
+
+    trustedPeopleCount: {
+      type: Number,
+      default: 0,
+    },
+
 
     plan: {
       type: String,

@@ -6,16 +6,29 @@ import crypto from "crypto";
 
 export const addTrustedPerson = async (req, res) => {
   try {
+
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+
+    if (!user.isPremium && user.trustedPeopleCount >= 1) {
+      return res.status(403).json({
+        message: "Free plan allows only 1 trusted person. Upgrade to Premium."
+      });
+    }
+    
     const { name, email, relation } = req.body;
 
     if (!name || !email || !relation) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+   
+
     const verificationToken = crypto.randomBytes(32).toString("hex");
 
     const person = await TrustedPerson.create({
-      owner: req.user.id,
+      owner: user.id,
       name,
       email,
       relation,
@@ -24,11 +37,19 @@ export const addTrustedPerson = async (req, res) => {
       verificationExpires: Date.now() + 24 * 60 * 60 * 1000,
     });
 
-    await logActivity(req.user.id, {
-      type: "TRUSTED_PERSON_ADDED",
-      title: "Trusted person added",
-      description: `${name} added as trusted person`,
-    });
+    // await logActivity(req.user.id, {
+    //   type: "TRUSTED_PERSON_ADDED",
+    //   title: "Trusted person added",
+    //   description: `${name} added as trusted person`,
+    // });
+
+    await logActivity({
+            owner: req.user.id,
+            action: "TRUSTED_PERSON_ADDED",
+            entityType: "TRUSTED_PERSON",
+            entityId: person.id,
+            message: "Trusted person added",
+          });
 
     const verifyUrl = `${process.env.BACKEND_URL}/api/trusted-people/verify?token=${verificationToken}`;
 
@@ -46,6 +67,10 @@ export const addTrustedPerson = async (req, res) => {
     } catch (emailError) {
       console.error("EMAIL SEND FAILED:", emailError);
     }
+
+    user.trustedPeopleCount += 1;
+    await user.save();
+    
 
     return res.status(201).json(person);
   } catch (err) {
@@ -69,6 +94,10 @@ export const getTrustedPeople = async (req, res) => {
 
 export const deleteTrustedPerson = async (req, res) => {
   try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+
     const person = await TrustedPerson.findOne({
       _id: req.params.id,
       owner: req.user.id,
@@ -82,11 +111,16 @@ export const deleteTrustedPerson = async (req, res) => {
     person.isDeleted = true;
     await person.save();
 
-    await logActivity(req.user.id, {
-      type: "TRUSTED_PERSON_REMOVED",
-      title: "Trusted person removed",
-      description: `${person.name} removed from trusted people`,
-    });
+    user.trustedPeopleCount -= 1;
+    await user.save();
+
+    await logActivity({
+            owner: req.user.id,
+            action: "TRUSTED_PERSON_DELETED",
+            entityType: "TRUSTED_PERSON",
+            entityId: person.id,
+            message: "Trusted person deleted",
+          });
 
     return res.json({ message: "Trusted person removed" });
   } catch (err) {
@@ -127,11 +161,13 @@ export const verifyTrustedPersonByToken = async (req, res) => {
 
     await person.save();
 
-    await logActivity(person.owner, {
-      type: "TRUSTED_PERSON_VERIFIED",
-      title: "Trusted person verified",
-      description: `${person.name} verified their access`,
-    });
+    await logActivity({
+            owner: req.user.id,
+            action: "TRUSTED_PERSON_VERIFIED",
+            entityType: "TRUSTED_PERSON",
+            entityId: person.id,
+            message: "Trusted person verified",
+          });
 
     return res.redirect(`${process.env.FRONTEND_URL}/dashboard/people`);
   } catch (err) {

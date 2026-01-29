@@ -6,6 +6,7 @@ export const createAsset = async (assetData) => {
   return res.data;
 };
 
+
 // Get assets
 export const getAssets = async () => {
   const res = await api.get("/assets");
@@ -18,6 +19,15 @@ export const getAssetById = async (id) => {
   const res = await api.get(`/assets/${id}`);
   return res.data;
 };
+
+export const downloadAssetFile = async (assetId) => {
+  const res = await api.get(`/assets/${assetId}/file`, {
+    responseType: "blob",
+  });
+  return res.data;
+};
+
+
 
 export const updateAsset = async (id, assetData) => {
   const res = await api.put(`/assets/${id}`, assetData);

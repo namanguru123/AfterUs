@@ -3,6 +3,7 @@ import { getAssets } from "../../services/assetService";
 import { Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+
 export default function DigitalAssets() {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,6 +65,8 @@ export default function DigitalAssets() {
           >
             + Add Asset
           </button>
+
+          
       </div>
 
 

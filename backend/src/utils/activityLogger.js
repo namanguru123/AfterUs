@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import ActivityLog from "../models/ActivityLog.js";
 
 export const logActivity = async ({
@@ -9,13 +10,13 @@ export const logActivity = async ({
 }) => {
   try {
     await ActivityLog.create({
-      owner,
+      owner: new mongoose.Types.ObjectId(owner),
       action,
       entityType,
-      entityId,
+      entityId: new mongoose.Types.ObjectId(entityId),
       message,
     });
   } catch (err) {
-    console.error("Activity log failed:", err.message);
+    console.error("Activity log failed:", err);
   }
 };

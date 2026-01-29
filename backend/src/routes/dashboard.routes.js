@@ -1,8 +1,7 @@
 import express from "express";
 import auth from "../middleware/auth.middleware.js";
 
-import DigitalAsset from "../models/DigitalAsset.js";
-import TrustedPerson from "../models/TrustedPerson.js";
+import User from "../models/User.js";
 import Condition from "../models/Condition.js";
 
 const router = express.Router();
@@ -10,14 +9,12 @@ const router = express.Router();
 router.get("/summary", auth, async (req, res) => {
   try {
     const userId = req.user.id;
+    const user = await User.findById(userId);
 
     const [assetsCount, peopleCount, conditionsCount] =
       await Promise.all([
-        DigitalAsset.countDocuments({
-          owner: userId,
-          isDeleted: false,
-        }),
-        TrustedPerson.countDocuments({ owner: userId }),
+        user.assetCount,
+        user.trustedPeopleCount,
         Condition.countDocuments({
           owner: userId,
           active: true,

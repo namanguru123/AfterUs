@@ -35,15 +35,41 @@ export default function SharedAssetView() {
         `/access/reveal/${asset._id}`
       );
 
-      setSensitiveData(res.data.value);
+      // Handle FILE type (PDF/IMAGE)
+      if (res.data.type === "FILE") {
+        // Download the file
+        try {
+          const fileRes = await api.get(`/access/download/${asset._id}`, {
+            responseType: "blob",
+          });
 
-      // auto-hide after 30 seconds
-      setTimeout(() => {
-        setSensitiveData(null);
-      }, 30000);
+          const fileBlob = fileRes.data;
+          const fileURL = window.URL.createObjectURL(fileBlob);
 
+          const link = document.createElement("a");
+          link.href = fileURL;
+          link.download = asset.title;
+          link.click();
+
+          window.URL.revokeObjectURL(fileURL);
+
+          alert(`File "${asset.title}" downloaded successfully!`);
+        } catch (downloadErr) {
+          console.error("Download error:", downloadErr);
+          alert("Failed to download file");
+        }
+      } else {
+        // Handle TEXT/LINK type - reveal sensitive data
+        setSensitiveData(res.data.value);
+
+        // auto-hide after 30 seconds
+        setTimeout(() => {
+          setSensitiveData(null);
+        }, 30000);
+      }
     } catch (err) {
-      alert("You are not allowed to view sensitive data");
+      console.error("Reveal error:", err);
+      alert("You are not allowed to view this asset");
     } finally {
       setRevealLoading(false);
     }

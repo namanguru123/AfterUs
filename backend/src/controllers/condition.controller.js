@@ -33,12 +33,13 @@ export const createCondition = async (req, res) => {
       trustedPeople,
     });
 
-    await logActivity(req.user.id, {
-      type: "CONDITION_CREATED",
-      title: "Condition created",
-      description: `${type} condition created`,
-    });
-
+    await logActivity({
+            owner: req.user.id,
+            action: "CONDITION_CREATED",
+            entityType: "CONDITION",
+            entityId: condition.id,
+            message: "Condition created",
+          });
     res.status(201).json(condition);
   } catch (err) {
     res.status(500).json({ message: "Failed to create condition" });
@@ -107,11 +108,13 @@ export const deleteCondition = async (req, res) => {
     condition.isDeleted = true;
     await condition.save();
 
-    await logActivity(req.user.id, {
-      type: "CONDITION_DELETED",
-      title: "Condition deleted",
-      description: "A condition was removed",
-    });
+    await logActivity({
+            owner: req.user.id,
+            action: "CONDITION_DELETED",
+            entityType: "CONDITION",
+            entityId: condition.id,
+            message: "Condition deleted",
+          });
 
     res.json({ message: "Condition deleted" });
   } catch (err) {
@@ -165,11 +168,13 @@ export const updateConditionAssets = async (req, res) => {
     condition.linkedAssets = assets;
     await condition.save();
 
-    await logActivity(req.user.id, {
-      type: "CONDITION_UPDATED",
-      title: "Assets linked to condition",
-      description: `Assets updated for ${condition.type} condition`,
-    });
+    await logActivity({
+            owner: req.user.id,
+            action: "CONDITION_UPDATED",
+            entityType: "CONDITION",
+            entityId: condition.id,
+            message: "Assets linked to condition",
+          });
 
     res.json(condition);
   } catch (err) {
@@ -200,11 +205,13 @@ export const updateConditionTrustedPeople = async (req, res) => {
     condition.trustedPeople = trustedPeople;
     await condition.save();
 
-    await logActivity(req.user.id, {
-      type: "CONDITION_UPDATED",
-      title: "Trusted people updated",
-      description: "Trusted people linked to condition",
-    });
+    await logActivity({
+            owner: req.user.id,
+            action: "CONDITION_UPDATED",
+            entityType: "CONDITION",
+            entityId: condition.id,
+            message: "Trusted people updated for condition",
+          });
 
     res.json({
       message: "Trusted people updated successfully",
@@ -281,13 +288,13 @@ export const triggerCondition = async (req, res) => {
     await AccessRule.insertMany(accessRules);
 
     // 🧾 ACTIVITY LOG
-    await ActivityLog.create({
-      owner: condition.owner,
-      action: "ASSET_UPDATED",
-      entityType: "ASSET",
-      entityId: condition._id,
-      message: `Condition "${condition.type}" was fulfilled`,
-    });
+    await logActivity({
+            owner: req.user.id,
+            action: "CONDITION_FULFILLED",
+            entityType: "CONDITION",
+            entityId: condition.id,
+            message: "Condition fulfilled and access rules created",
+          });
 
     // ✅ COMMIT — THIS IS THE ONLY STATE CHANGE
     condition.executionStatus = "FULFILLED";

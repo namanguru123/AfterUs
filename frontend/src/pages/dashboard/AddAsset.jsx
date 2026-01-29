@@ -7,41 +7,63 @@ export default function AddAsset() {
 
   const [form, setForm] = useState({
     title: "",
-    category: "Email",
-    type: "Account",
+    category: "Documents",
+    assetType: "TEXT",
     data: "",
+    file: null,
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+
+    if (name === "file") {
+      setForm((prev) => ({ ...prev, file: files[0] }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-  try {
-    await createAsset({
-      title: form.title,
-      category: form.category,
-      assetType: form.type, 
-      data: form.data,
-    });
+    try {
+      // TEXT & LINK → JSON request
+      if (form.assetType === "TEXT" || form.assetType === "LINK") {
+        await createAsset({
+          title: form.title,
+          category: form.category,
+          assetType: form.assetType,
+          data: form.data,
+        });
+      }
 
-    navigate("/dashboard/assets");
-  } catch (err) {
-    setError("Failed to create asset");
-  } finally {
-    setLoading(false);
-  }
-};
+      // PDF & IMAGE → multipart/form-data
+      if (form.assetType === "PDF" || form.assetType === "IMAGE") {
+        if (!form.file) {
+          throw new Error("File is required");
+        }
 
+        const formData = new FormData();
+        formData.append("file", form.file);
+        formData.append("title", form.title);
+        formData.append("category", form.category);
+        formData.append("assetType", form.assetType);
 
+        await createAsset(formData);
+      }
 
+      navigate("/dashboard/assets");
+    } catch (err) {
+      setError(err.message || "Failed to create asset");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="max-w-2xl bg-white border border-slate-200 rounded-xl p-8">
@@ -50,7 +72,6 @@ export default function AddAsset() {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-
         {/* Title */}
         <div>
           <label className="block text-sm text-slate-600 mb-1">
@@ -62,7 +83,7 @@ export default function AddAsset() {
             onChange={handleChange}
             required
             className="w-full px-4 py-3 rounded-lg border border-slate-300"
-            placeholder="Primary Email Account"
+            placeholder="Important Document / Account"
           />
         </div>
 
@@ -77,53 +98,79 @@ export default function AddAsset() {
             onChange={handleChange}
             className="w-full px-4 py-3 rounded-lg border border-slate-300"
           >
-            <option>Email</option>
-            <option>Finance</option>
-            <option>Social</option>
-            <option>Documents</option>
+            <option value="Documents">Documents</option>
+            <option value="Financial">Financial</option>
+            <option value="Health">Health</option>
+            <option value="Personal">Personal</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
-        {/* Type */}
+        {/* Asset Type */}
         <div>
           <label className="block text-sm text-slate-600 mb-1">
             Asset Type
           </label>
           <select
-            name="type"
-            value={form.type}
+            name="assetType"
+            value={form.assetType}
             onChange={handleChange}
             className="w-full px-4 py-3 rounded-lg border border-slate-300"
           >
-            <option>Account</option>
-            <option>File</option>
-            <option>Note</option>
+            <option value="TEXT">TEXT</option>
+            <option value="LINK">LINK</option>
+            <option value="PDF">PDF</option>
+            <option value="IMAGE">IMAGE</option>
           </select>
         </div>
 
-        {/* Sensitive Data */}
-        <div>
-          <label className="block text-sm text-slate-600 mb-1">
-            Sensitive Data
-          </label>
-          <textarea
-            name="data"
-            value={form.data}
-            onChange={handleChange}
-            required
-            rows={4}
-            className="w-full px-4 py-3 rounded-lg border border-slate-300"
-            placeholder="Username, password, recovery info…"
-          />
-          <p className="text-xs text-slate-500 mt-1">
-            This information will be encrypted before storage.
-          </p>
-        </div>
+        {/* TEXT / LINK Data */}
+        {(form.assetType === "TEXT" || form.assetType === "LINK") && (
+          <div>
+            <label className="block text-sm text-slate-600 mb-1">
+              Sensitive Data
+            </label>
+            <textarea
+              name="data"
+              value={form.data}
+              onChange={handleChange}
+              required
+              rows={4}
+              className="w-full px-4 py-3 rounded-lg border border-slate-300"
+              placeholder="Credentials, instructions, notes…"
+            />
+            <p className="text-xs text-slate-500 mt-1">
+              This data is encrypted and visible only to you.
+            </p>
+          </div>
+        )}
+
+        {/* FILE Upload */}
+        {(form.assetType === "PDF" || form.assetType === "IMAGE") && (
+          <div>
+            <label className="block text-sm text-slate-600 mb-1">
+              Upload File
+            </label>
+            <input
+              type="file"
+              name="file"
+              accept={
+                form.assetType === "PDF"
+                  ? "application/pdf"
+                  : "image/*"
+              }
+              onChange={handleChange}
+              required
+              className="w-full"
+            />
+            <p className="text-xs text-slate-500 mt-1">
+              File will be stored securely and accessible only to you.
+            </p>
+          </div>
+        )}
 
         {error && (
-          <p className="text-sm text-red-600">
-            {error}
-          </p>
+          <p className="text-sm text-red-600">{error}</p>
         )}
 
         <button
