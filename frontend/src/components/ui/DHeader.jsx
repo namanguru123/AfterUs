@@ -52,13 +52,13 @@ const DHeader = ({ title = "Dashboard" }) => {
         {/* Notifications */}
         <button className="relative p-2 rounded-full hover:bg-slate-100">
           <Bell size={20} />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-purple-600 rounded-full" />
+          <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
         </button>
 
         {/* User + Logout */}
         <div className="flex items-center gap-3">
 
-          <div className="w-9 h-9 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm font-semibold">
+          <div className="w-9 h-9 rounded-full bg-accent text-white flex items-center justify-center text-sm font-semibold">
             {displayName[0]?.toUpperCase()}
           </div>
 

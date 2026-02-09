@@ -3,6 +3,8 @@ import { logActivity } from "../utils/activityLogger.js";
 import AccessRule from "../models/AccessRule.js";
 import TrustedPerson from "../models/TrustedPerson.js";
 import ActivityLog from "../models/ActivityLog.js";
+import { resolveConditionStatus } from "../utils/conditionStatus.js";
+import User from "../models/User.js";
 
 export const createCondition = async (req, res) => {
   try {
@@ -76,18 +78,22 @@ export const toggleConditionStatus = async (req, res) => {
       return res.status(404).json({ message: "Condition not found" });
     }
 
-    condition.status =
-      condition.status === "ACTIVE" ? "PAUSED" : "ACTIVE";
+  
+    if(condition.lifecycleStatus === "ACTIVE") {
+      condition.lifecycleStatus = "PAUSED";
+    } else {
+      condition.lifecycleStatus = "ACTIVE";
+    }
 
     await condition.save();
 
     await logActivity(req.user.id, {
       type: "CONDITION_UPDATED",
       title: "Condition updated",
-      description: `Condition ${condition.status.toLowerCase()}`,
+      description: `Condition ${condition.executionStatus.toLowerCase()}`,
     });
 
-    res.json({ status: condition.status });
+    res.json({ executionStatus: condition.executionStatus });
   } catch (err) {
     res.status(500).json({ message: "Failed to update condition" });
   }
@@ -308,6 +314,48 @@ export const triggerCondition = async (req, res) => {
     console.error("TRIGGER CONDITION ERROR:", error);
     return res.status(500).json({
       message: "Failed to trigger condition",
+    });
+  }
+};
+
+
+// GET /api/conditions/:id/status
+export const getConditionStatus = async (req, res) => {
+  try {
+    const userId = req.user.id; // ⚠️ important: id, not _id
+    const { id: conditionId } = req.params;
+
+    // 1. Fetch condition with ownership check
+    const condition = await Condition.findOne({
+      _id: conditionId,
+      owner: userId,
+    });
+
+    if (!condition) {
+      return res.status(404).json({
+        message: "Condition not found",
+      });
+    }
+
+    // 2. Fetch user's last activity
+    const user = await User.findById(userId).select("lastActiveAt");
+
+    // 3. Resolve status (pure logic)
+    const statusResult = resolveConditionStatus({
+      condition,
+      userLastActiveAt: user?.lastActiveAt,
+    });
+
+    // 4. Return read-only response
+    return res.status(200).json({
+      conditionId: condition._id,
+      type: condition.type,
+      ...statusResult,
+    });
+  } catch (error) {
+    console.error("Error resolving condition status:", error);
+    return res.status(500).json({
+      message: "Failed to resolve condition status",
     });
   }
 };

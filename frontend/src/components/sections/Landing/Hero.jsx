@@ -32,7 +32,7 @@ export default function Hero() {
   }, [wordIndex])
 
   return (
-    <section className="hero-section relative from-white via-blue-50 to-indigo-100 overflow-hidden">
+    <section className="hero-section relative from-white via-light to-light overflow-hidden">
       {/* Animated background elements */}
       <motion.div
         animate={{
@@ -44,7 +44,7 @@ export default function Hero() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-20 right-20 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl opacity-20"
+        className="absolute top-20 right-20 w-96 h-96 bg-secondary rounded-full filter blur-3xl opacity-20"
       />
       <motion.div
         animate={{
@@ -57,7 +57,7 @@ export default function Hero() {
           ease: "easeInOut",
           delay: 1,
         }}
-        className="absolute bottom-0 left-20 w-80 h-80 bg-indigo-400 rounded-full filter blur-3xl opacity-20"
+        className="absolute bottom-0 left-20 w-80 h-80 bg-accent rounded-full filter blur-3xl opacity-20"
       />
 
       <div className="relative z-10">

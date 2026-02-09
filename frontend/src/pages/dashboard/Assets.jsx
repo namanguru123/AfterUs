@@ -36,17 +36,17 @@ export default function DigitalAssets() {
           
           <button
             onClick={() => navigate("/dashboard/assets/new")}
-            className="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm hover:bg-slate-800"
+            className="bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-secondary"
           >
             + Add Asset
           </button>
         </div>
 
-        <Lock className="mx-auto text-slate-400 mb-4" size={32} />
-        <h2 className="text-lg font-semibold text-slate-900">
+        <Lock className="mx-auto text-neutral mb-4" size={32} />
+        <h2 className="text-lg font-semibold text-primary">
           No digital assets yet
         </h2>
-        <p className="text-sm text-slate-500 mt-2">
+        <p className="text-sm text-neutral mt-2">
           Start by adding your first secure digital asset.
         </p>
       </div>
@@ -61,7 +61,7 @@ export default function DigitalAssets() {
 
           <button
             onClick={() => navigate("/dashboard/assets/new")}
-            className="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm hover:bg-slate-800"
+            className="bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-secondary"
           >
             + Add Asset
           </button>

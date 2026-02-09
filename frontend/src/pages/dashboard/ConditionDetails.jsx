@@ -4,6 +4,7 @@ import {
   getConditionById,
   updateConditionAssets,
   updateConditionTrustedPeople,
+  getConditionStatus
 } from "../../services/conditionService";
 import { getAssets } from "../../services/assetService";
 import { getTrustedPeople } from "../../services/trustedPeopleService";
@@ -22,6 +23,9 @@ export default function ConditionDetails() {
   const [loading, setLoading] = useState(true);
   const [savingAssets, setSavingAssets] = useState(false);
   const [savingPeople, setSavingPeople] = useState(false);
+
+  const [statusData, setStatusData] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(true);
 
   // ✅ EXTRACTED FUNCTION (this was missing earlier)
   const fetchConditionDetails = async () => {
@@ -55,6 +59,34 @@ export default function ConditionDetails() {
     fetchConditionDetails();
   }, [id]);
 
+  
+
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const data = await getConditionStatus(id);
+        setStatusData(data)
+      } catch (err) {
+        console.error("Failed to load condition status", err);
+      } finally {
+        setStatusLoading(false);
+      }
+    };
+
+    fetchStatus();
+  }, [id]);
+
+  const effectiveStatus =
+  condition && condition.executionStatus === "FULFILLED"
+    ? {
+        status: "TRIGGERED",
+        daysRemaining: 0,
+        triggeredAt: condition.fulfilledAt,
+      }
+    : statusData;
+
+
   // ✅ Trigger condition (now works correctly)
   const handleTriggerCondition = async () => {
     try {
@@ -67,17 +99,30 @@ export default function ConditionDetails() {
     }
   };
 
+  
+
+
   if (loading) return <p>Loading...</p>;
   if (!condition) return <p>Condition not found</p>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" >
       <h1 className="text-2xl font-semibold">Condition Details</h1>
+
+      {statusLoading ? (
+            <p className="text-sm text-gray-500">Checking condition status…</p>
+          ) : (
+            <ConditionStatusBanner statusData={effectiveStatus} />
+          )}
 
       <div className="bg-white border rounded-xl p-5 space-y-2">
         <p><strong>Type:</strong> {condition.type}</p>
-        <p><strong>Status:</strong> {condition.status}</p>
+        <p><strong>Status:</strong> {condition.executionStatus}</p>
         <p><strong>Inactivity Days:</strong> {condition.config?.inactivityDays}</p>
+        
+
+        
+        
 
         {condition.executionStatus !== "FULFILLED" && (
           <button
@@ -117,6 +162,7 @@ export default function ConditionDetails() {
           );
         })}
 
+
         <button
           disabled={savingAssets}
           onClick={async () => {
@@ -124,7 +170,7 @@ export default function ConditionDetails() {
             await updateConditionAssets(condition._id, selectedAssets);
             setSavingAssets(false);
           }}
-          className="mt-4 bg-slate-900 text-white px-5 py-2 rounded"
+          className="mt-4 bg-primary btn-primary text-white px-5 py-2 rounded"
         >
           {savingAssets ? "Saving..." : "Save Assets"}
         </button>
@@ -167,7 +213,7 @@ export default function ConditionDetails() {
             );
             setSavingPeople(false);
           }}
-          className="mt-4 bg-slate-900 text-white px-5 py-2 rounded"
+          className="mt-4 bg-primary btn-primary text-white px-5 py-2 rounded"
         >
           {savingPeople ? "Saving..." : "Save Trusted People"}
         </button>
@@ -175,3 +221,34 @@ export default function ConditionDetails() {
     </div>
   );
 }
+
+
+
+const ConditionStatusBanner = ({ statusData }) => {
+  if (!statusData) return null;
+
+  const { status, daysRemaining } = statusData;
+
+  const styles = {
+    SAFE: "bg-green-100 text-green-700 border-green-300",
+    WARNING: "bg-yellow-100 text-yellow-700 border-yellow-300",
+    TRIGGERED: "bg-red-100 text-red-700 border-red-300",
+  };
+
+  const messages = {
+    SAFE: "Everything is safe. No action needed.",
+    WARNING: `Condition may trigger in ${daysRemaining} day(s).`,
+    TRIGGERED: "Condition is eligible for execution.",
+  };
+
+  return (
+    <div
+      className={`border rounded-lg p-4 mb-4 ${styles[status]}`}
+    >
+      <h4 className="font-semibold mb-1">
+        Condition Status: {status}
+      </h4>
+      <p className="text-sm">{messages[status]}</p>
+    </div>
+  );
+};

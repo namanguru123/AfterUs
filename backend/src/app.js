@@ -13,6 +13,7 @@ import trustedPeopleRoutes from "./routes/trustedPeople.routes.js";
 import conditionRoutes from "./routes/condition.routes.js";
 import accessRuleRoutes from "./routes/accessRule.routes.js";
 import accessRoutes from "./routes/access.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 
 
@@ -57,6 +58,7 @@ app.use("/api/trusted-people", trustedPeopleRoutes);
 app.use("/api/conditions", conditionRoutes);
 app.use("/api/access-rules", accessRuleRoutes);
 app.use("/api/access", accessRoutes);
+app.use("/api/user", userRoutes);
 
 
 

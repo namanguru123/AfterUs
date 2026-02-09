@@ -51,13 +51,13 @@ export default function HowItWorks() {
               transition={{ duration: 3, repeat: Infinity }}
               className="flex flex-col items-center"
             >
-              <span className="text-5xl font-light text-indigo-500">01</span>
+              <span className="text-5xl font-light text-accent">01</span>
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                className="mt-6 w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center"
+                className="mt-6 w-14 h-14 rounded-2xl bg-light flex items-center justify-center"
               >
-                <FileText className="text-indigo-600" />
+                <FileText className="text-accent" />
               </motion.div>
             </motion.div>
 
@@ -65,7 +65,7 @@ export default function HowItWorks() {
               whileHover={{
                 boxShadow: "0 20px 40px rgba(99,102,241,0.15)",
               }}
-              className="bg-indigo-50 border border-indigo-100 rounded-2xl p-8 transition-all"
+              className="bg-light border border-neutral rounded-2xl p-8 transition-all"
             >
               <h3 className="text-lg font-semibold text-slate-900">
                 Define your digital assets

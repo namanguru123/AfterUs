@@ -17,7 +17,7 @@ router.get("/summary", auth, async (req, res) => {
         user.trustedPeopleCount,
         Condition.countDocuments({
           owner: userId,
-          active: true,
+          lifecycleStatus: "ACTIVE",
         }),
       ]);
 

@@ -24,7 +24,7 @@ import SharedAssetView from "./pages/SharedAssetView";
 
 import ProtectedRoute from "./context/ProtectedRoute";
 
-import "./styles/buttons.css";
+// moved buttons import into index.css so Tailwind directives are available
 
 export default function App() {
   const [summary, setSummary] = useState({

@@ -12,6 +12,7 @@ import {
   updateConditionAssets,
   updateConditionTrustedPeople,
   triggerCondition,
+  getConditionStatus
 } from "../controllers/condition.controller.js";
 
 
@@ -28,6 +29,7 @@ router.post("/:id/trigger", triggerCondition);
 router.post("/", createCondition);
 router.get("/", getMyConditions);
 router.get("/:id", getConditionById);
+router.get("/:id/status", getConditionStatus);
 
 router.patch("/:id/assets", updateConditionAssets);
 router.patch("/:id/trusted-people", updateConditionTrustedPeople);

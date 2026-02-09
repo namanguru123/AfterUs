@@ -44,3 +44,8 @@ export const updateConditionTrustedPeople = (conditionId, trustedPeople) => {
     trustedPeople,
   });
 };
+
+export const getConditionStatus = async (conditionId) => {
+  const res = await api.get(`/conditions/${conditionId}/status`);
+  return res.data;
+};

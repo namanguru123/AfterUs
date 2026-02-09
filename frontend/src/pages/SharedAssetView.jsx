@@ -27,6 +27,8 @@ export default function SharedAssetView() {
     load();
   }, [id]);
 
+  console.log(asset);
+
   const revealSensitiveData = async () => {
     try {
       setRevealLoading(true);
@@ -82,10 +84,18 @@ export default function SharedAssetView() {
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">{asset.title}</h1>
 
-      <p className="text-gray-600">{asset.description}</p>
 
       <p>
-        <strong>Type:</strong> {asset.assetType}
+        <strong>Type:</strong> {asset.type}
+      </p>
+
+      <p className="text-sm text-gray-500">
+        Owned by{" "}
+        <span className="font-medium text-gray-800">
+          {asset.owner.name}
+        </span>
+        <br />
+        {asset.owner.email}
       </p>
 
       <p className="text-sm text-gray-500">
@@ -101,7 +111,7 @@ export default function SharedAssetView() {
         {/* <button
           onClick={revealSensitiveData}
           disabled={revealLoading}
-          className="px-4 py-2 bg-black text-white rounded"
+          className="px-4 py-2 bg-primary text-white rounded"
         >
           {revealLoading ? "Revealing..." : "Reveal Sensitive Data"}
         </button> */}
@@ -111,8 +121,8 @@ export default function SharedAssetView() {
           disabled={!!sensitiveData}
           className={`mt-4 px-4 py-2 rounded ${
             sensitiveData
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-blue-600 text-white"
+              ? "bg-neutral cursor-not-allowed"
+              : "bg-primary text-white"
           }`}
         >
           {revealLoading ? "Revealing..." : "Reveal Sensitive Data"}

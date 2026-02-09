@@ -21,12 +21,12 @@ const navItems = [
 
 const Sidebar = () => {
   return (
-    <aside className="w-80 min-h-screen flex-shrink-1 bg-gradient-to-b from-[#0B1220] to-[#060B16] text-white flex flex-col">
+    <aside className="w-80 min-h-screen flex-shrink-1 bg-gradient-to-b from-[#000] to-[#00000f] text-white flex flex-col">
       
       {/* Brand */}
       <div className="px-6 py-6 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
             <ShieldCheck size={20} />
           </div>
           <div>
@@ -47,7 +47,7 @@ const Sidebar = () => {
                 `flex items-center gap-3 h-8 px-4 mx-1 rounded-xl whitespace-nowrap transition-all
                 ${
                   isActive
-                    ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
                     : "text-white/70 hover:bg-white/5 hover:text-white"
                 }`
               }

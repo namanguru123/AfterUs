@@ -58,7 +58,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center px-4">
-      <Link to="/" className="absolute top-6 left-6 text-gray-600 hover:text-gray-800">
+      <Link to="/" className="absolute top-6 left-6 text-gray-600 hover:text-gray-800 btn-secondary">
         <ArrowLeft />
       </Link>
       <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl p-8">
@@ -94,28 +94,28 @@ export default function Login() {
             <button
               type="button"
               onClick={handleResendVerification}
-              className="text-sm text-indigo-600 underline"
+              className="text-sm text-accent underline btn-secondary"
             >
               Resend verification email
             </button>
           )}
 
           {resendMessage && (
-            <p className="text-sm text-green-600">{resendMessage}</p>
+            <p className="text-sm text-accent">{resendMessage}</p>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-slate-900 text-white py-3 rounded-lg"
+            className="w-full btn-primary"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
-        <p className="mt-6 text-sm text-slate-500">
+        <p className="mt-6 text-sm text">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-indigo-600 underline">
+          <Link to="/register" className="text-accent underline btn-secondary ml-10">
             Create one
           </Link>
         </p>

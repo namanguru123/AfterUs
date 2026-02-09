@@ -1,3 +1,7 @@
+
+/* Import custom component styles after Tailwind directives so @layer works */
+@import "./styles/buttons.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,4 +12,14 @@ body {
   padding: 0;
   width: 100%;
   overflow-x: hidden;
+}
+
+/* Hide scrollbar but keep scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
 }

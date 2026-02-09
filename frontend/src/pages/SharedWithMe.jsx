@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 export default function SharedWithMe() {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [asset, setAsset] = useState(null);
+  const[accessRule, setAccessRule] = useState(null);
+
 
   useEffect(() => {
     const load = async () => {
@@ -18,6 +21,8 @@ export default function SharedWithMe() {
       }
     };
 
+    
+
     load();
   }, []);
 
@@ -26,6 +31,14 @@ export default function SharedWithMe() {
   if (assets.length === 0) {
     return <p>No assets shared with you.</p>;
   }
+
+  assets.map(a => {
+    
+  })
+
+  
+  console.log(assets[0]);
+  
 
   return (
     <div className="space-y-4">
@@ -46,6 +59,13 @@ export default function SharedWithMe() {
 
 
           <h2 className="font-medium">{asset.title}</h2>
+
+          <p className="text-sm text-gray-500 mt-2">
+            Owned by{" "}
+            <span className="font-medium text-gray-800">
+              {asset.owner.name}  {" <"}{asset.owner.email}{">" }
+            </span>
+          </p>
           <p className="text-sm text-gray-500">
             Shared on: {new Date(asset.createdAt).toLocaleDateString()}
           </p>

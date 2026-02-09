@@ -17,6 +17,8 @@ export default function Conditions() {
     setConditions(data);
   };
 
+  console.log(conditions[0]);
+
   useEffect(() => {
     load();
   }, []);
@@ -57,7 +59,7 @@ export default function Conditions() {
 
           <button
             onClick={handleCreate}
-            className="bg-slate-900 text-white px-4 py-2 rounded"
+            className="btn-primary"
           >
             Create
           </button>
@@ -65,6 +67,7 @@ export default function Conditions() {
       </div>
 
       {conditions.map((c) => (
+
         <div
           key={c._id}
           className="bg-white border rounded-xl p-5 flex justify-between items-center"
@@ -74,13 +77,13 @@ export default function Conditions() {
 
             <Link
               to={`/dashboard/conditions/${c._id}`}
-              className="font-medium text-indigo-600 hover:underline"
+              className="font-medium text-accent hover:underline"
             >
               {c.type.replace("_", " ")}
             </Link>
 
             <p className="text-sm text-slate-500">
-              Status: {c.status}
+              Status: {c.lifecycleStatus}
             </p>
           </div>
 
@@ -92,9 +95,9 @@ export default function Conditions() {
                 await toggleCondition(c._id);
                 load();
               }}
-              className="text-sm px-3 py-1 rounded bg-slate-100"
+              className="btn-secondary text-sm px-3 py-1 rounded"
             >
-              {c.status === "ACTIVE" ? "Pause" : "Activate"}
+              {c.lifecycleStatus === "ACTIVE" ? "Pause" : "Activate"}
             </button>
 
             <button
@@ -102,7 +105,7 @@ export default function Conditions() {
                 await deleteCondition(c._id);
                 load();
               }}
-              className="text-sm px-3 py-1 rounded text-red-600"
+              className="btn-secondary text-sm px-3 py-1 rounded text-red-600"
             >
               Delete
             </button>

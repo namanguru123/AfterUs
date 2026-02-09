@@ -128,7 +128,7 @@ export default function AssetDetails() {
 
            <button
               onClick={handleOpenPdf}
-              className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800"
+              className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary"
             >
               Open / Download PDF
             </button>
@@ -148,7 +148,7 @@ export default function AssetDetails() {
 
           <button
           onClick={() => navigate(`/dashboard/assets/${asset.id}/edit`)}
-          className="text-indigo-600"
+          className="text-accent"
         >
           Edit
         </button>

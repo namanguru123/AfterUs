@@ -53,7 +53,7 @@ export default function WhoItsFor() {
             <motion.div
               animate={{ width: ["0%", "100%"] }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="w-12 h-1 rounded-full bg-indigo-500 mb-6"
+              className="w-12 h-1 rounded-full bg-accent mb-6"
             />
             <h3 className="text-xl font-semibold text-slate-900 mb-4">
               Professionals with complex digital lives
@@ -78,7 +78,7 @@ export default function WhoItsFor() {
             <motion.div
               animate={{ width: ["0%", "100%"] }}
               transition={{ duration: 0.5, delay: 0.6 }}
-              className="w-12 h-1 rounded-full bg-indigo-500 mb-6"
+              className="w-12 h-1 rounded-full bg-accent mb-6"
             />
             <h3 className="text-xl font-semibold text-slate-900 mb-4">
               Families with shared responsibilities
@@ -103,7 +103,7 @@ export default function WhoItsFor() {
             <motion.div
               animate={{ width: ["0%", "100%"] }}
               transition={{ duration: 0.5, delay: 0.7 }}
-              className="w-12 h-1 rounded-full bg-indigo-500 mb-6"
+              className="w-12 h-1 rounded-full bg-accent mb-6"
             />
             <h3 className="text-xl font-semibold text-slate-900 mb-4">
               Anyone who thinks long-term

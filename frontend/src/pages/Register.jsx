@@ -54,11 +54,11 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center px-4">
-      <Link to="/" className="absolute top-6 left-6 text-gray-600 hover:text-gray-800">
+      <Link to="/" className="absolute top-6 left-6 text-neutral hover:text-primary btn-secondary">
         <ArrowLeft />
       </Link>
       {/* Background glow */}
-      <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-indigo-200/30 rounded-full blur-3xl -z-10" />
+      <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-light/30 rounded-full blur-3xl -z-10" />
 
       <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl p-8">
         {/* Logo */}
@@ -153,30 +153,30 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-slate-900 text-white py-3 rounded-lg font-medium hover:bg-slate-800 transition disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full btn-primary font-medium transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Creating account..." : "Create account securely →"}
           </button>
         </form>
 
         {/* Trust indicators */}
-        <div className="mt-6 flex gap-6 text-xs text-slate-400">
+        <div className="mt-6 flex gap-6 text-xs">
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full" />
+            <span className="w-2 h-2 bg-accent rounded-full" />
             End-to-end encrypted
           </span>
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full" />
+            <span className="w-2 h-2 bg-accent rounded-full" />
             Privacy-first by design
           </span>
         </div>
 
         {/* Footer */}
-        <div className="mt-8 text-sm text-slate-500">
+        <div className="mt-8 text-sm">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-indigo-600 hover:underline"
+            className="text-accent hover:underline btn-secondary ml-10"
           >
             Sign in
           </Link>

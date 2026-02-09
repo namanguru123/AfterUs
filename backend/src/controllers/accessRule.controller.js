@@ -9,7 +9,8 @@ export const getSharedWithMe = async (req, res) => {
       trustedContact: userId,
       status: "ACTIVE",
       isRevoked: false,
-    }).populate("asset");
+    }).populate("asset")
+    .populate("owner", "fullName email");
 
     const assets = rules
       .filter(rule => rule.asset)
@@ -19,6 +20,11 @@ export const getSharedWithMe = async (req, res) => {
         title: rule.asset.title,
         description: rule.asset.description,
         createdAt: rule.asset.createdAt,
+        owner: {
+          id: rule.owner._id,
+          name: rule.owner.fullName,
+          email: rule.owner.email
+        }
       }));
 
     return res.json(assets);
@@ -37,7 +43,8 @@ export const getSharedAssetByRule = async (req, res) => {
       trustedContact: req.user.id,
       status: "ACTIVE",
       isRevoked: false,
-    }).populate("asset");
+    }).populate("asset")
+    .populate("owner", "fullName email");
 
     if (!rule || !rule.asset) {
       return res.status(403).json({ message: "Access denied" });
@@ -47,9 +54,13 @@ export const getSharedAssetByRule = async (req, res) => {
       asset: {
         _id: rule.asset._id,
         title: rule.asset.title,
-        description: rule.asset.description,
-        type: rule.asset.type,
+        type: rule.asset.assetType,
         createdAt: rule.asset.createdAt,
+        owner: {
+          id: rule.owner._id,
+          name: rule.owner.fullName,
+          email: rule.owner.email
+        }
       },
     });
   } catch (err) {

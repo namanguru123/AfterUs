@@ -72,11 +72,11 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' })
     }
 
-    if (!user.isVerified) {
-      return res.status(403).json({
-        message: "Please verify your email before logging in",
-      });
-    }
+    // if (!user.isVerified) {
+    //   return res.status(403).json({
+    //     message: "Please verify your email before logging in",
+    //   });
+    // }
 
 
     const isMatch = await bcrypt.compare(password, user.password)
@@ -190,3 +190,5 @@ export const resendVerificationEmail = async (req, res) => {
     });
   }
 };
+
+

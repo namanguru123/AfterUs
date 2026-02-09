@@ -21,7 +21,7 @@ export default function PrivacySecurity() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-20 right-10 w-72 h-72 bg-indigo-500 rounded-full filter blur-3xl opacity-20"
+        className="absolute top-20 right-10 w-72 h-72 bg-accent rounded-full filter blur-3xl opacity-20"
       />
       <motion.div
         animate={{
@@ -34,7 +34,7 @@ export default function PrivacySecurity() {
           ease: "easeInOut",
           delay: 1,
         }}
-        className="absolute bottom-20 left-10 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl opacity-20"
+        className="absolute bottom-20 left-10 w-96 h-96 bg-secondary rounded-full filter blur-3xl opacity-20"
       />
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">

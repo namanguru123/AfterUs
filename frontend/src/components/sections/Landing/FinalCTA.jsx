@@ -19,14 +19,14 @@ export default function FinalCTA() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl opacity-20"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent rounded-full filter blur-3xl opacity-20"
       />
 
       <div className="relative mx-auto max-w-5xl px-6 text-center">
         {/* Small label */}
         <motion.div
           {...fadeInUp}
-          className="mb-6 flex items-center justify-center gap-2 text-sm font-medium text-indigo-600"
+          className="mb-6 flex items-center justify-center gap-2 text-sm font-medium text-accent"
         >
           <motion.span
             animate={{ rotate: [0, 20, 0] }}
@@ -52,7 +52,7 @@ export default function FinalCTA() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
+            className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent"
           >
             The second best time is now.
           </motion.span>
@@ -137,9 +137,9 @@ export default function FinalCTA() {
           }}
           transition={{ duration: 0.6, delay: 0.6 }}
           viewport={{ once: true, margin: "0px 0px -100px 0px" }}
-          className="mt-20 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-10 text-center shadow-sm transition-all cursor-default"
+          className="mt-20 rounded-2xl border border-light bg-light/60 p-10 text-center shadow-sm transition-all cursor-default"
         >
-          <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-700">
+          <p className="mx-auto max-w-3xl text-lg leading-relaxed text-primary">
             "We built AfterUs because we believe responsible people
             deserve responsible tools. Digital continuity shouldn't
             be an afterthought — it should be as natural as any other
@@ -150,13 +150,13 @@ export default function FinalCTA() {
             <motion.div
               animate={{ rotate: [0, 360] }}
               transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              className="h-10 w-10 rounded-full bg-indigo-500"
+              className="h-10 w-10 rounded-full bg-accent"
             />
             <div className="text-left">
-              <p className="font-medium text-slate-900">
+              <p className="font-medium text-primary">
                 The AfterUs Team
               </p>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-secondary">
                 Building for the long term
               </p>
             </div>
