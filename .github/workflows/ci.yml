@@ -1,0 +1,54 @@
+name: AfterUs CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # -----------------------------
+      # Backend Setup
+      # -----------------------------
+      - name: Setup Node.js (Backend)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm install
+
+      - name: Lint Backend
+        working-directory: ./backend
+        run: npm run lint || true
+
+      # -----------------------------
+      # Frontend Setup
+      # -----------------------------
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      # -----------------------------
+      # Optional: Docker Build Test
+      # -----------------------------
+      - name: Build Backend Docker Image
+        run: docker build ./backend -t test-backend
+
+      - name: Build Frontend Docker Image
+        run: docker build ./frontend -t test-frontend

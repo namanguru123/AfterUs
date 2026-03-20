@@ -25,6 +25,8 @@ export default function DigitalAssets() {
     fetchAssets();
   }, []);
 
+  console.log("Fetched assets:", assets);
+
   if (loading) {
     return <p className="text-slate-500">Loading assets…</p>;
   }
