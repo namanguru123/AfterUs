@@ -13,7 +13,7 @@ const pageTitles = {
 
 const DashboardLayout = () => {
   const location = useLocation();
-  const title = pageTitles[location.pathname] || "Dashboard";
+  const title = pageTitles[location.pathname] || "DashBoard";
 
   return (
     <div className="h-screen w-screen flex ">
