@@ -51,7 +51,7 @@ export const addTrustedPerson = async (req, res) => {
             message: "Trusted person added",
           });
 
-    const verifyUrl = `${process.env.BACKEND_URL}/api/trusted-people/verify?token=${verificationToken}`;
+    const verifyUrl = `${process.env.CLIENT_URL}/api/trusted-people/verify?token=${verificationToken}`;
 
     try {
       await sendEmail({
