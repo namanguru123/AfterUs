@@ -40,9 +40,9 @@ app.use(
 //   message: "Too many requests. Please try again later.",
 // });
 
-if (process.env.NODE_ENV === "production") {
-  app.use(limiter);
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(limiter);
+// }
 
 app.use(express.json({ limit: "10kb" }));
 
