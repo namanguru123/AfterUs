@@ -25,11 +25,19 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: "*",
+    origin: [
+      "http://localhost:5173",
+      "https://after-25m6e6pyl-namanguru123s-projects.vercel.app",
+    ],
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+
+
+
 
 
 
