@@ -53,9 +53,13 @@ export const addTrustedPerson = async (req, res) => {
 
     const verifyUrl = `${process.env.CLIENT_URL}/api/trusted-people/verify?token=${verificationToken}`;
 
+          console.log("REQ BODY:", req.body);
+console.log("EMAIL VALUE:", email);
+console.log("EMAIL TYPE:", typeof email);
+
     try {
       await sendEmail({
-        to: email,
+        to: "namansharma.work.in@gmail.com",
         subject: "Verify your access on AfterUs",
         html: `
           <p>You have been added as a trusted person on <strong>AfterUs</strong>.</p>
