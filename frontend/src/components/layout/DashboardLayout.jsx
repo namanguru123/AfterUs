@@ -4,16 +4,18 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const pageTitles = {
   "/dashboard": "Dashboard",
-  "/assets": "Digital Assets",
-  "/people": "Trusted People",
-  "/conditions": "Conditions",
-  "/activity": "Activity Log",
-  "/settings": "Settings",
+  "/dashboard/assets": "Digital Assets",
+  "/dashboard/people": "Trusted People",
+  "/dashboard/conditions": "Conditions",
+  "/dashboard/activity": "Activity Log",
+  "/dashboard/settings": "Settings",
+  "/dashboard/shared-with-me": "Shared With Me",
 };
 
 const DashboardLayout = () => {
   const location = useLocation();
-  const title = pageTitles[location.pathname] || "DashBoard";
+  console.log("Current path:", location.pathname);
+  const title = pageTitles[location.pathname];
 
   return (
     <div className="h-screen w-screen flex ">

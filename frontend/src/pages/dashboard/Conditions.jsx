@@ -36,7 +36,6 @@ export default function Conditions() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Conditions</h1>
 
       {conditions.length === 0 && (
         <p className="text-slate-500">No conditions created yet</p>

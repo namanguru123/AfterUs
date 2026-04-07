@@ -39,7 +39,6 @@ const Settings = () => {
     <div className="space-y-6">
       {/* Page Title */}
       <div>
-        <h1 className="text-2xl font-semibold">Settings</h1>
         <p className="text-sm text-gray-500">
           Manage your account and security preferences
         </p>
