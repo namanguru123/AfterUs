@@ -11,7 +11,7 @@ import Footer from "../components/layout/Footer";
 
 export default function Landing() {
     return (
-        <div className="min-h-screen flex flex-col" >
+        <div className="min-h-screen flex flex-col overflow-hidden" >
             <Header />
             <Hero />
             <Problem />
