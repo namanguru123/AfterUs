@@ -59,7 +59,7 @@ console.log("EMAIL TYPE:", typeof email);
 
     try {
       await sendEmail({
-        to: "namansharma.work.in@gmail.com",
+        to: email,
         subject: "Verify your access on AfterUs",
         html: `
           <p>You have been added as a trusted person on <strong>AfterUs</strong>.</p>
@@ -68,6 +68,8 @@ console.log("EMAIL TYPE:", typeof email);
           <p>This link will expire in 24 hours.</p>
         `,
       });
+
+      console.log("Verification email sent to:", email);
     } catch (emailError) {
       console.error("EMAIL SEND FAILED:", emailError);
     }
