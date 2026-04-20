@@ -51,7 +51,7 @@ export const addTrustedPerson = async (req, res) => {
             message: "Trusted person added",
           });
 
-    const verifyUrl = `${process.env.CLIENT_URL}/api/trusted-people/verify?token=${verificationToken}`;
+    const verifyUrl = `${process.env.BACKEND_URL}/api/trusted-people/verify?token=${verificationToken}`;
 
           console.log("REQ BODY:", req.body);
 console.log("EMAIL VALUE:", email);
@@ -138,6 +138,8 @@ export const verifyTrustedPersonByToken = async (req, res) => {
   try {
     const { token } = req.query;
 
+    console.log("TOKEN RECEIVED:", req.query.token);
+
     if (!token) {
       return res.status(400).send("Invalid verification link");
     }
@@ -147,6 +149,8 @@ export const verifyTrustedPersonByToken = async (req, res) => {
       verificationExpires: { $gt: Date.now() },
       isDeleted: false,
     });
+
+    console.log("Found person for token:", person);
 
     if (!person) {
       return res.status(400).send("Verification link expired or invalid");

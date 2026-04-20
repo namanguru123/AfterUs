@@ -40,7 +40,7 @@ export const register = async (req, res) => {
     user.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000; // 24h
 
     await user.save();
-    const baseUrl = process.env.CLIENT_URL || "http://localhost";
+    const baseUrl = process.env.BACKEND_URL || "http://localhost";
 
     const verificationUrl = `${baseUrl}/verify-email?token=${verificationToken}`;
 
@@ -171,7 +171,7 @@ export const resendVerificationEmail = async (req, res) => {
 
     await user.save();
 
-    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+    const verifyUrl = `${process.env.BACKEND_URL}/verify-email?token=${verificationToken}`;
 
     await sendEmail({
       to: user.email,
