@@ -1,21 +1,16 @@
-# Stage 1 — Build
-FROM node:20-alpine AS build
+FROM node:20
 
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
+
 RUN npm run build
 
-# Stage 2 — Serve
-FROM nginx:alpine
+RUN npm install -g serve
 
-COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 3000
 
-# Override only default server config (NOT full nginx.conf)
-RUN rm /etc/nginx/conf.d/default.conf
-
-COPY default.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", "dist", "-l", "3000"]
