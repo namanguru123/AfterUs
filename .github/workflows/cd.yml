@@ -1,0 +1,45 @@
+name: Deploy AfterUs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "🚀 Starting deployment..."
+
+            cd ~/deploy/AfterUs || exit
+
+            echo "📥 Pulling latest code..."
+            git pull origin main
+
+            echo "📦 Backend setup..."
+            cd backend
+            npm install
+
+            echo "🔁 Restart backend..."
+            pm2 restart afterus-backend || pm2 start server.js --name afterus-backend
+
+            echo "📦 Frontend setup..."
+            cd ../frontend
+            npm install
+            npm run build
+
+            echo "🔁 Restart frontend..."
+            pm2 restart afterus-frontend || pm2 start "serve -s dist -l 3000" --name afterus-frontend
+
+            echo "💾 Saving PM2..."
+            pm2 save
+
+            echo "✅ Deployment complete!"
