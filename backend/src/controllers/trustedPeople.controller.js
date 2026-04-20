@@ -53,9 +53,7 @@ export const addTrustedPerson = async (req, res) => {
 
     const verifyUrl = `${process.env.BACKEND_URL}/api/trusted-people/verify?token=${verificationToken}`;
 
-          console.log("REQ BODY:", req.body);
-console.log("EMAIL VALUE:", email);
-console.log("EMAIL TYPE:", typeof email);
+          
 
     try {
       await sendEmail({
@@ -78,7 +76,9 @@ console.log("EMAIL TYPE:", typeof email);
     await user.save();
     
 
-    return res.status(201).json(person);
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/login?verified=true`
+    );
   } catch (err) {
     console.error("ADD TRUSTED PERSON ERROR:", err);
     return res.status(500).json({ message: "Failed to add trusted person" });
