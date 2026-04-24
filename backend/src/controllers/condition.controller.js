@@ -287,15 +287,16 @@ export const triggerCondition = async (req, res) => {
 
     for (const asset of condition.linkedAssets) {
       for (const person of condition.trustedPeople) {
-        const trustedUserId = person.userId?._id || person.userId;
 
-        if (!trustedUserId) {
-          throw new Error("Invalid trusted person");
+        const user = await User.findOne({ email: person.email });
+
+        if (!user) {
+          throw new Error("Trusted user not found");
         }
 
         accessRules.push({
           owner: condition.owner,
-          trustedContact: trustedUserId,
+          trustedContact: user._id,
           asset: asset._id,
           condition: condition._id,
           status: "ACTIVE",
