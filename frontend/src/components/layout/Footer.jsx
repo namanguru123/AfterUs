@@ -5,9 +5,9 @@ export default function Footer() {
     <footer className="relative bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-300">
       <div className="mx-auto max-w-7xl px-6 py-20">
         {/* Top grid */}
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:gap-12">
           {/* Brand */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <div className="mb-4 flex items-center gap-2 text-white">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10">
                 <Shield size={18} />

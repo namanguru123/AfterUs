@@ -26,25 +26,25 @@ const DHeader = ({ title = "Dashboard", onMenuToggle }) => {
     "User";
 
   return (
-    <header className="h-20 w-full border-b px-4 md:px-8 flex items-center justify-between" style={{background: '#F4F7FA', borderColor: '#d0dce8'}}>
+    <header className="h-20 flex-shrink-0 w-full border-b px-4 md:px-8 flex items-center justify-between" style={{background: '#F4F7FA', borderColor: '#d0dce8'}}>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
         {/* Hamburger Menu (Mobile Only) */}
         <button 
           onClick={onMenuToggle}
-          className="md:hidden p-2 -ml-2 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors"
+          className="md:hidden p-2 -ml-2 rounded-lg hover:bg-slate-200 text-slate-700 transition-colors flex-shrink-0"
         >
           <Menu size={24} />
         </button>
 
         {/* Title */}
-        <h1 className="text-xl md:text-3xl font-semibold truncate max-w-[150px] sm:max-w-none" style={{color: '#0A1F33'}}>
+        <h1 className="text-xl md:text-3xl font-semibold truncate" style={{color: '#0A1F33'}}>
           {title}
         </h1>
       </div>
 
       {/* Right actions */}
-      <div className="flex items-center gap-2 md:gap-4">
+      <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
 
         {/* Plan - Hidden on mobile */}
         <div className="hidden md:block px-4 py-2 rounded-full text-sm font-medium border" style={{background: 'rgba(91,196,177,0.12)', color: '#3A4750', borderColor: 'rgba(91,196,177,0.4)'}}>

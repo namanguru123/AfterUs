@@ -17,7 +17,7 @@ export default function Header() {
   };
 
   return (
-    <header>
+    <header className="landing-header">
       <div>
         
         {/* Logo */}
