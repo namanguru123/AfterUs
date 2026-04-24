@@ -75,7 +75,7 @@ export default function AssetDetails() {
 
 
   return (
-    <div className="max-w-2xl bg-white border border-slate-200 rounded-xl p-8">
+    <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-xl p-6 md:p-8">
       <h2 className="text-2xl font-semibold text-slate-900 mb-2">
         {asset.title}
       </h2>
@@ -136,7 +136,7 @@ export default function AssetDetails() {
       )}
 
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4 mt-6">
         {canReveal && (
           <>
           <button

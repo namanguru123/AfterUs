@@ -160,7 +160,7 @@ export default function Register() {
         </form>
 
         {/* Trust indicators */}
-        <div className="mt-6 flex gap-6 text-xs">
+        <div className="mt-6 flex flex-wrap gap-4 text-xs">
           <span className="flex items-center gap-2">
             <span className="w-2 h-2 bg-accent rounded-full" />
             End-to-end encrypted

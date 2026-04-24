@@ -3,9 +3,11 @@
   background: #fbfdff;
   position: relative;
   overflow: hidden;
-  height: 90vh;
-  padding-left: 5rem;
+  min-height: 90vh;
+  padding-left: 5vw;
+  padding-right: 5vw;
   padding-top: 6rem;
+  padding-bottom: 4rem;
 }
 
 .hero-section::after {
@@ -37,7 +39,7 @@
 /* TITLE */
 .hero-title {
   font-family: Georgia, 'Times New Roman', Times, serif;
-  font-size: 60px;
+  font-size: clamp(40px, 6vw, 60px);
   line-height: 0.98;
   font-weight: 300;
   letter-spacing: -0.02em;
@@ -160,7 +162,8 @@
   transform: translateY(100px);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(220,226,230,0.9);
-  min-width: 320px;
+  width: 100%;
+  max-width: 480px;
   margin-top: 3rem;
   transition: all 0.3s ease;
 }
@@ -281,7 +284,10 @@
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .hero-title { font-size: 56px; }
-  .hero-section::after { display: none; }
-  .hero-section .hero-card { position: relative; right: auto; bottom: auto; width: 100%; transform: translateY(-6px); }
+  .hero-section .hero-card { position: relative; right: auto; top: auto; width: 100%; transform: translateY(-6px); margin-top: 2rem; }
+  .hero-section { padding-left: 2rem; padding-right: 2rem; }
+}
+
+@media (max-width: 768px) {
+  .hero-section { padding-left: 1rem; padding-right: 1rem; min-height: auto; }
 }

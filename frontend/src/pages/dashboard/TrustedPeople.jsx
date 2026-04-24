@@ -127,7 +127,7 @@ export default function TrustedPeople() {
             {people.map((person) => (
               <li
                 key={person._id}
-                className="flex items-center justify-between border rounded-lg p-4"
+                className="flex flex-col sm:flex-row sm:items-center justify-between border rounded-lg p-4 gap-4"
               >
                 <div>
                   <p className="font-medium text-slate-900">
@@ -138,7 +138,7 @@ export default function TrustedPeople() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 self-start sm:self-auto">
                   <span
                     className={`text-xs px-2 py-1 rounded-full ${
                       person.status === "VERIFIED"

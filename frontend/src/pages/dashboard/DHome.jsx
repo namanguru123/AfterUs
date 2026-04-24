@@ -84,7 +84,7 @@ export default function DashboardHome() {
   return (
     <div className="space-y-8">
 
-      <div className="flex items-center justify-between rounded-xl p-6" style={{background: 'rgba(91,196,177,0.1)', border: '1px solid rgba(91,196,177,0.35)' }}>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl p-6" style={{background: 'rgba(91,196,177,0.1)', border: '1px solid rgba(91,196,177,0.35)' }}>
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{background: 'rgba(91,196,177,0.2)'}}>
             <Lock style={{color: '#5BC4B1'}} size={20} />
@@ -201,9 +201,9 @@ function Card({
 
 function ActivityItem({ color, title, desc, time }) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${color}`}>
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+      <div className="flex items-start sm:items-center gap-4">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${color}`}>
           <Activity size={14} />
         </div>
         <div>
@@ -215,7 +215,7 @@ function ActivityItem({ color, title, desc, time }) {
           </div>
         </div>
       </div>
-      <span className="text-xs" style={{color: '#5DB7E8'}}>
+      <span className="text-xs ml-12 sm:ml-0" style={{color: '#5DB7E8'}}>
         {time}
       </span>
     </div>

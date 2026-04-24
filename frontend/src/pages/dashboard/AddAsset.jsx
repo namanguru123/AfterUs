@@ -66,7 +66,7 @@ export default function AddAsset() {
   };
 
   return (
-    <div className="max-w-2xl bg-white border border-slate-200 rounded-xl p-8">
+    <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-xl p-6 md:p-8">
       <h2 className="text-2xl font-semibold text-slate-900 mb-6">
         Add Digital Asset
       </h2>
@@ -176,7 +176,7 @@ export default function AddAsset() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-slate-900 text-white px-6 py-3 rounded-lg hover:bg-slate-800 disabled:opacity-60"
+          className="bg-slate-900 text-white px-6 py-3 rounded-lg hover:bg-slate-800 disabled:opacity-60 w-full sm:w-auto"
         >
           {loading ? "Saving..." : "Save Asset"}
         </button>

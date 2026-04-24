@@ -54,7 +54,7 @@ export default function ActivityLogs() {
           {logs.map((log) => (
             <li
               key={log._id}
-              className="flex justify-between border-b pb-3"
+              className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b pb-3"
             >
               <div>
                 <p className="font-medium text-slate-900">

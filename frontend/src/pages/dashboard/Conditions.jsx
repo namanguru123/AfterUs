@@ -46,19 +46,19 @@ export default function Conditions() {
           Create inactivity condition
         </p>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <input
             type="number"
             min="1"
             value={days}
             onChange={(e) => setDays(e.target.value)}
             placeholder="Days of inactivity"
-            className="border rounded px-3 py-2 w-48"
+            className="border rounded px-3 py-2 w-full sm:w-48"
           />
 
           <button
             onClick={handleCreate}
-            className="btn-primary"
+            className="btn-primary w-full sm:w-auto"
           >
             Create
           </button>
@@ -69,7 +69,7 @@ export default function Conditions() {
 
         <div
           key={c._id}
-          className="bg-white border rounded-xl p-5 flex justify-between items-center"
+          className="bg-white border rounded-xl p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4"
         >
           <div>
             

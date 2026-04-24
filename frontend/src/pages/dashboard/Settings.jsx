@@ -49,22 +49,22 @@ const Settings = () => {
         <h2 className="text-lg font-semibold mb-3">Account</h2>
 
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
             <span className="text-gray-600">Name</span>
             <span className="font-medium">{userDetails?.fullName || "Loading..."}</span>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
             <span className="text-gray-600">Email</span>
             <span className="font-medium">{userDetails?.email || "Loading..."}</span>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
             <span className="text-gray-600">Plan</span>
             <span className="font-medium text-green-600">{userDetails?.plan || "Loading..."}</span>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
             <span className="text-gray-600">Verified</span>
             <span className="font-medium text-green-600">{userDetails?.isVerified ? "Yes" : "No"}</span>
           </div>
@@ -76,7 +76,7 @@ const Settings = () => {
         <h2 className="text-lg font-semibold mb-3">Security</h2>
 
         <div className="space-y-3 text-sm">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
             <div>
               <p className="font-medium">End-to-End Encryption</p>
               <p className="text-gray-500">
@@ -86,7 +86,7 @@ const Settings = () => {
             <span className="text-green-600 font-semibold">Enabled</span>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
             <div>
               <p className="font-medium">JWT Authentication</p>
               <p className="text-gray-500">

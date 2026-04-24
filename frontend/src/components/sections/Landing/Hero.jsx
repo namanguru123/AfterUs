@@ -60,9 +60,9 @@ export default function Hero() {
         className="absolute bottom-0 left-20 w-80 h-80 bg-accent rounded-full filter blur-3xl opacity-20"
       />
 
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
         {/* LEFT */}
-        <div>
+        <div className="w-full lg:w-1/2">
         
           <motion.h1
             {...fadeInUp}
@@ -96,11 +96,11 @@ export default function Hero() {
           <motion.div
             {...fadeInUp}
             transition={{ ...fadeInUp.transition, delay: 0.3 }}
-            className="mt-10 flex items-center gap-6"
+            className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6"
           >
             <motion.button
               {...buttonHover}
-              className="btn-primary"
+              className="btn-primary w-full sm:w-auto m-0"
               aria-label="Create your plan"
             >
               Create your plan 
@@ -108,7 +108,7 @@ export default function Hero() {
 
             <motion.button
               {...buttonHover}
-              className="btn-secondary"
+              className="btn-secondary w-full sm:w-auto m-0"
               aria-label="See how it works"
             >
                See how it works
@@ -141,7 +141,7 @@ export default function Hero() {
         </motion.div>
 
         {/* RIGHT */}
-        <div className="flex justify-end self-end mt-5">
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end mt-8 lg:mt-5 relative">
           <motion.div
             animate={{
               boxShadow: [
