@@ -232,8 +232,6 @@ export const updateConditionTrustedPeople = async (req, res) => {
 };
 
 
-
-
 export const triggerCondition = async (req, res) => {
   try {
     const conditionId = req.params.id;
@@ -250,14 +248,12 @@ export const triggerCondition = async (req, res) => {
       return res.status(404).json({ message: "Condition not found" });
     }
 
-    // 🛑 GUARD: already fulfilled
     if (condition.executionStatus === "FULFILLED") {
       return res.status(400).json({
         message: "Condition already fulfilled",
       });
     }
 
-    // 🛑 VALIDATION (NO STATE CHANGE YET)
     if (
       condition.type === "INACTIVITY" &&
       !condition.config?.inactivityDays
@@ -268,41 +264,57 @@ export const triggerCondition = async (req, res) => {
     }
 
     if (
-      !condition.linkedAssets.length ||
-      !condition.trustedPeople.length
+      !condition.linkedAssets?.length ||
+      !condition.trustedPeople?.length
     ) {
       return res.status(400).json({
         message: "Assets or trusted people not linked",
       });
     }
 
-    // 🔐 CREATE ACCESS RULES
+    const existingRules = await AccessRule.findOne({
+      condition: condition._id,
+      isRevoked: false,
+    });
+
+    if (existingRules) {
+      return res.status(400).json({
+        message: "Condition already triggered",
+      });
+    }
+
     const accessRules = [];
 
     for (const asset of condition.linkedAssets) {
       for (const person of condition.trustedPeople) {
+        const trustedUserId = person.userId?._id || person.userId;
+
+        if (!trustedUserId) {
+          throw new Error("Invalid trusted person");
+        }
+
         accessRules.push({
           owner: condition.owner,
-          trustedContact: person.userId, // ✅ matches your AccessRule mapping
+          trustedContact: trustedUserId,
           asset: asset._id,
           condition: condition._id,
           status: "ACTIVE",
+          isRevoked: false,
+          grantedAt: new Date(),
         });
       }
     }
 
     await AccessRule.insertMany(accessRules);
 
-    // 🧾 ACTIVITY LOG
     await logActivity({
-            owner: req.user.id,
-            action: "CONDITION_FULFILLED",
-            entityType: "CONDITION",
-            entityId: condition.id,
-            message: "Condition fulfilled and access rules created",
-          });
+      owner: req.user.id,
+      action: "CONDITION_FULFILLED",
+      entityType: "CONDITION",
+      entityId: condition._id,
+      message: "Condition fulfilled and access rules created",
+    });
 
-    // ✅ COMMIT — THIS IS THE ONLY STATE CHANGE
     condition.executionStatus = "FULFILLED";
     condition.triggeredAt = new Date();
     await condition.save();
@@ -318,8 +330,94 @@ export const triggerCondition = async (req, res) => {
   }
 };
 
+// export const triggerCondition = async (req, res) => {
+//   try {
+//     const conditionId = req.params.id;
+
+//     const condition = await Condition.findOne({
+//       _id: conditionId,
+//       owner: req.user.id,
+//       isDeleted: false,
+//     })
+//       .populate("linkedAssets")
+//       .populate("trustedPeople");
+
+//     if (!condition) {
+//       return res.status(404).json({ message: "Condition not found" });
+//     }
+
+//     // 🛑 GUARD: already fulfilled
+//     if (condition.executionStatus === "FULFILLED") {
+//       return res.status(400).json({
+//         message: "Condition already fulfilled",
+//       });
+//     }
+
+//     // 🛑 VALIDATION (NO STATE CHANGE YET)
+//     if (
+//       condition.type === "INACTIVITY" &&
+//       !condition.config?.inactivityDays
+//     ) {
+//       return res.status(400).json({
+//         message: "Inactivity days not configured",
+//       });
+//     }
+
+//     if (
+//       !condition.linkedAssets.length ||
+//       !condition.trustedPeople.length
+//     ) {
+//       return res.status(400).json({
+//         message: "Assets or trusted people not linked",
+//       });
+//     }
+
+//     // 🔐 CREATE ACCESS RULES
+//     const accessRules = [];
+
+//     for (const asset of condition.linkedAssets) {
+//       for (const person of condition.trustedPeople) {
+//         accessRules.push({
+//           owner: condition.owner,
+//           trustedContact: person.userId, // ✅ matches your AccessRule mapping
+//           asset: asset._id,
+//           condition: condition._id,
+//           status: "ACTIVE",
+//         });
+//       }
+//     }
+
+//     await AccessRule.insertMany(accessRules);
+
+//     // 🧾 ACTIVITY LOG
+//     await logActivity({
+//             owner: req.user.id,
+//             action: "CONDITION_FULFILLED",
+//             entityType: "CONDITION",
+//             entityId: condition.id,
+//             message: "Condition fulfilled and access rules created",
+//           });
+
+//     // ✅ COMMIT — THIS IS THE ONLY STATE CHANGE
+//     condition.executionStatus = "FULFILLED";
+//     condition.triggeredAt = new Date();
+//     await condition.save();
+
+//     return res.json({
+//       message: "Condition fulfilled successfully",
+//     });
+//   } catch (error) {
+//     console.error("TRIGGER CONDITION ERROR:", error);
+//     return res.status(500).json({
+//       message: "Failed to trigger condition",
+//     });
+//   }
+// };
+
 
 // GET /api/conditions/:id/status
+
+
 export const getConditionStatus = async (req, res) => {
   try {
     const userId = req.user.id; // ⚠️ important: id, not _id
@@ -360,114 +458,116 @@ export const getConditionStatus = async (req, res) => {
   }
 };
 
-export const triggerCondition = async (req, res) => {
-  try {
-    const conditionId = req.params.id;
-    const userId = req.user.id;
 
-    const condition = await Condition.findOne({
-      _id: conditionId,
-      owner: userId,
-      isDeleted: false,
-    })
-      .populate("linkedAssets")
-      .populate("trustedPeople");
 
-    if (!condition) {
-      return res.status(404).json({ message: "Condition not found" });
-    }
+// export const triggerCondition = async (req, res) => {
+//   try {
+//     const conditionId = req.params.id;
+//     const userId = req.user.id;
 
-    // 🛑 Already fulfilled guard
-    if (condition.executionStatus === "FULFILLED") {
-      return res.status(400).json({
-        message: "Condition already fulfilled",
-      });
-    }
+//     const condition = await Condition.findOne({
+//       _id: conditionId,
+//       owner: userId,
+//       isDeleted: false,
+//     })
+//       .populate("linkedAssets")
+//       .populate("trustedPeople");
 
-    // 🛑 Validation checks
-    if (
-      condition.type === "INACTIVITY" &&
-      !condition.config?.inactivityDays
-    ) {
-      return res.status(400).json({
-        message: "Inactivity days not configured",
-      });
-    }
+//     if (!condition) {
+//       return res.status(404).json({ message: "Condition not found" });
+//     }
 
-    if (
-      !condition.linkedAssets?.length ||
-      !condition.trustedPeople?.length
-    ) {
-      return res.status(400).json({
-        message: "Assets or trusted people not linked",
-      });
-    }
+//     // 🛑 Already fulfilled guard
+//     if (condition.executionStatus === "FULFILLED") {
+//       return res.status(400).json({
+//         message: "Condition already fulfilled",
+//       });
+//     }
 
-    // 🛑 Idempotency check (prevent duplicate execution)
-    const existingRules = await AccessRule.findOne({
-      condition: condition._id,
-      isRevoked: false,
-    });
+//     // 🛑 Validation checks
+//     if (
+//       condition.type === "INACTIVITY" &&
+//       !condition.config?.inactivityDays
+//     ) {
+//       return res.status(400).json({
+//         message: "Inactivity days not configured",
+//       });
+//     }
 
-    if (existingRules) {
-      return res.status(400).json({
-        message: "Condition already triggered",
-      });
-    }
+//     if (
+//       !condition.linkedAssets?.length ||
+//       !condition.trustedPeople?.length
+//     ) {
+//       return res.status(400).json({
+//         message: "Assets or trusted people not linked",
+//       });
+//     }
 
-    // 🔐 Build access rules
-    const accessRules = [];
+//     // 🛑 Idempotency check (prevent duplicate execution)
+//     const existingRules = await AccessRule.findOne({
+//       condition: condition._id,
+//       isRevoked: false,
+//     });
 
-    for (const asset of condition.linkedAssets) {
-      for (const person of condition.trustedPeople) {
+//     if (existingRules) {
+//       return res.status(400).json({
+//         message: "Condition already triggered",
+//       });
+//     }
 
-        // 🔥 SAFE extraction of trusted user ID
-        const trustedUserId = person.userId?._id || person.userId;
+//     // 🔐 Build access rules
+//     const accessRules = [];
 
-        if (!trustedUserId) {
-          throw new Error("Invalid trusted person: missing userId");
-        }
+//     for (const asset of condition.linkedAssets) {
+//       for (const person of condition.trustedPeople) {
 
-        accessRules.push({
-          owner: condition.owner,
-          trustedContact: trustedUserId,
-          asset: asset._id,
-          condition: condition._id,
-          status: "ACTIVE",
-          grantedAt: new Date(),
-          isRevoked: false,
-        });
-      }
-    }
+//         // 🔥 SAFE extraction of trusted user ID
+//         const trustedUserId = person.userId?._id || person.userId;
 
-    // 🚀 Bulk insert
-    await AccessRule.insertMany(accessRules);
+//         if (!trustedUserId) {
+//           throw new Error("Invalid trusted person: missing userId");
+//         }
 
-    // 🧾 Activity log
-    await logActivity({
-      owner: userId,
-      action: "CONDITION_FULFILLED",
-      entityType: "CONDITION",
-      entityId: condition._id,
-      message: "Condition fulfilled and access rules created",
-    });
+//         accessRules.push({
+//           owner: condition.owner,
+//           trustedContact: trustedUserId,
+//           asset: asset._id,
+//           condition: condition._id,
+//           status: "ACTIVE",
+//           grantedAt: new Date(),
+//           isRevoked: false,
+//         });
+//       }
+//     }
 
-    // ✅ Final state update (only commit point)
-    condition.executionStatus = "FULFILLED";
-    condition.triggeredAt = new Date();
-    await condition.save();
+//     // 🚀 Bulk insert
+//     await AccessRule.insertMany(accessRules);
 
-    return res.json({
-      message: "Condition fulfilled successfully",
-    });
+//     // 🧾 Activity log
+//     await logActivity({
+//       owner: userId,
+//       action: "CONDITION_FULFILLED",
+//       entityType: "CONDITION",
+//       entityId: condition._id,
+//       message: "Condition fulfilled and access rules created",
+//     });
 
-  } catch (error) {
-    console.error("TRIGGER CONDITION ERROR:", error);
-    return res.status(500).json({
-      message: "Failed to trigger condition",
-    });
-  }
-};
+//     // ✅ Final state update (only commit point)
+//     condition.executionStatus = "FULFILLED";
+//     condition.triggeredAt = new Date();
+//     await condition.save();
+
+//     return res.json({
+//       message: "Condition fulfilled successfully",
+//     });
+
+//   } catch (error) {
+//     console.error("TRIGGER CONDITION ERROR:", error);
+//     return res.status(500).json({
+//       message: "Failed to trigger condition",
+//     });
+//   }
+// };
 
 
 
