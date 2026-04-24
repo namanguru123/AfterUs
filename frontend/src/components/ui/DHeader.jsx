@@ -26,10 +26,10 @@ const DHeader = ({ title = "Dashboard" }) => {
     "User";
 
   return (
-    <header className="h-20 w-full bg-white border-b border-slate-200 px-8 grid grid-cols-[auto_1fr_auto] items-center">
+    <header className="h-20 w-full border-b px-8 grid grid-cols-[auto_1fr_auto] items-center" style={{background: '#F4F7FA', borderColor: '#d0dce8'}}>
 
       {/* Title */}
-      <h1 className="text-3xl font-semibold text-slate-900">
+      <h1 className="text-3xl font-semibold" style={{color: '#0A1F33'}}>
         {title}
       </h1>
 
@@ -39,18 +39,18 @@ const DHeader = ({ title = "Dashboard" }) => {
       <div className="flex items-center gap-4">
 
         {/* Plan */}
-        <div className="px-4 py-2 rounded-full bg-green-50 text-green-700 text-sm font-medium border border-green-200">
+        <div className="px-4 py-2 rounded-full text-sm font-medium border" style={{background: 'rgba(91,196,177,0.12)', color: '#3A4750', borderColor: 'rgba(91,196,177,0.4)'}}>
           Free Plan
         </div>
 
         {/* Encrypted */}
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 text-slate-700 text-sm border border-slate-200">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full text-sm border" style={{background: 'rgba(93,183,232,0.10)', color: '#3A4750', borderColor: 'rgba(93,183,232,0.3)'}}>
           <ShieldCheck size={16} />
           Encrypted
         </div>
 
         {/* Notifications */}
-        <button className="relative p-2 rounded-full hover:bg-slate-100">
+        <button className="relative p-2 rounded-full transition-colors" style={{}} onMouseEnter={e => e.currentTarget.style.background='rgba(93,183,232,0.12)'} onMouseLeave={e => e.currentTarget.style.background='transparent'}>
           <Bell size={20} />
           <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
         </button>
@@ -58,11 +58,11 @@ const DHeader = ({ title = "Dashboard" }) => {
         {/* User + Logout */}
         <div className="flex items-center gap-3">
 
-          <div className="w-9 h-9 rounded-full bg-accent text-white flex items-center justify-center text-sm font-semibold">
+          <div className="w-9 h-9 rounded-full text-white flex items-center justify-center text-sm font-semibold" style={{background: '#5DB7E8'}}>
             {displayName[0]?.toUpperCase()}
           </div>
 
-          <span className="text-sm font-medium text-slate-700">
+          <span className="text-sm font-medium" style={{color: '#3A4750'}}>
             {displayName}
           </span>
 

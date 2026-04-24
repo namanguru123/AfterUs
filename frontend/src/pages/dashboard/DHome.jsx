@@ -84,25 +84,25 @@ export default function DashboardHome() {
   return (
     <div className="space-y-8">
 
-      <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl p-6">
+      <div className="flex items-center justify-between rounded-xl p-6" style={{background: 'rgba(91,196,177,0.1)', border: '1px solid rgba(91,196,177,0.35)' }}>
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-            <Lock className="text-emerald-600" size={20} />
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{background: 'rgba(91,196,177,0.2)'}}>
+            <Lock style={{color: '#5BC4B1'}} size={20} />
           </div>
           <div>
-            <p className="text-lg font-semibold text-emerald-800">
+            <p className="text-lg font-semibold" style={{color: '#0A1F33'}}>
               Plan Active and Monitored
             </p>
-            <p className="text-sm text-emerald-700">
+            <p className="text-sm" style={{color: '#3A4750'}}>
               Your digital continuity plan is secure and all conditions are being monitored
             </p>
           </div>
         </div>
-        <span className="w-3 h-3 bg-emerald-500 rounded-full" />
+        <span className="w-3 h-3 rounded-full" style={{background: '#5BC4B1'}} />
       </div>
 
       <div>
-        <h2 className="text-xl font-semibold text-slate-900 mb-4">
+        <h2 className="text-xl font-semibold mb-4" style={{color: '#0A1F33'}}>
           Overview
         </h2>
 
@@ -143,19 +143,19 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-xl p-6">
+      <div className="rounded-xl p-6 border" style={{background: 'white', borderColor: '#d0dce8'}}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-slate-900">
+          <h2 className="text-xl font-semibold" style={{color: '#0A1F33'}}>
             Recent Activity
           </h2>
-          <button className="text-sm text-indigo-600 hover:underline" onClick={() => navigate("/dashboard/activity")}>
+          <button className="text-sm hover:underline" style={{color: '#5DB7E8'}} onClick={() => navigate("/dashboard/activity")}>
             View all
           </button>
         </div>
 
         <div className="space-y-4">
           {activities.length === 0 ? (
-            <p className="text-sm text-slate-500">No recent activity</p>
+            <p className="text-sm" style={{color: '#3A4750'}}>No recent activity</p>
           ) : (
             activities.map((activity) => (
               <ActivityItem
@@ -182,17 +182,17 @@ function Card({
   iconBg = "bg-indigo-100",
 }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6">
+    <div className="rounded-xl p-6 border" style={{background: 'white', borderColor: '#d0dce8'}}>
       <div className={`w-10 h-10 rounded-lg ${iconBg} flex items-center justify-center mb-4`}>
         <span className={iconColor}>{icon}</span>
       </div>
-      <div className="text-4xl font-bold text-slate-900 mb-1">
+      <div className="text-4xl font-bold mb-1" style={{color: '#0A1F33'}}>
         {value}
       </div>
-      <div className="text-sm font-medium text-slate-700">
+      <div className="text-sm font-medium" style={{color: '#3A4750'}}>
         {label}
       </div>
-      <div className="text-xs text-slate-500 mt-1">
+      <div className="text-xs mt-1" style={{color: '#5DB7E8'}}>
         {sub}
       </div>
     </div>
@@ -207,15 +207,15 @@ function ActivityItem({ color, title, desc, time }) {
           <Activity size={14} />
         </div>
         <div>
-          <div className="text-sm font-medium text-slate-900">
+          <div className="text-sm font-medium" style={{color: '#0A1F33'}}>
             {title}
           </div>
-          <div className="text-xs text-slate-500">
+          <div className="text-xs" style={{color: '#3A4750'}}>
             {desc}
           </div>
         </div>
       </div>
-      <span className="text-xs text-slate-400">
+      <span className="text-xs" style={{color: '#5DB7E8'}}>
         {time}
       </span>
     </div>

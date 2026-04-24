@@ -24,7 +24,7 @@ const DashboardLayout = () => {
       <Sidebar />
 
       {/* Main Area */}
-      <div className="flex flex-col flex-1 min-w-0 bg-gradient-to-br from-slate-50 to-white ">
+      <div className="flex flex-col flex-1 min-w-0" style={{background: '#F4F7FA'}}>
         
         {/* Header */}
         <Header title={title} />

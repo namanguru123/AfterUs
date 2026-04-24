@@ -21,12 +21,12 @@ const navItems = [
 
 const Sidebar = () => {
   return (
-    <aside className="w-80 min-h-screen flex-shrink-1 bg-gradient-to-b from-[#000] to-[#00000f] text-white flex flex-col">
+    <aside className="w-80 min-h-screen flex-shrink-1 text-white flex flex-col" style={{background: 'linear-gradient(160deg, #0A1F33 0%, #0d2a44 100%)'}}>
       
       {/* Brand */}
       <div className="px-6 py-6 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background: '#5BC4B1'}}>
             <ShieldCheck size={20} />
           </div>
           <div>
@@ -43,13 +43,11 @@ const Sidebar = () => {
               key={name}
               to={path}
               end={path === "/dashboard"}
-              className={({ isActive }) =>
-                `flex items-center gap-3 h-8 px-4 mx-1 rounded-xl whitespace-nowrap transition-all
-                ${
-                  isActive
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
-                    : "text-white/70 hover:bg-white/5 hover:text-white"
-                }`
+              className="flex items-center gap-3 h-8 px-4 mx-1 rounded-xl whitespace-nowrap transition-all"
+              style={({ isActive }) =>
+                isActive
+                  ? { background: 'rgba(93,183,232,0.25)', color: '#5DB7E8', boxShadow: '0 2px 8px rgba(93,183,232,0.2)' }
+                  : { color: 'rgba(255,255,255,0.65)' }
               }
             >
 
@@ -62,8 +60,8 @@ const Sidebar = () => {
       {/* Security Card */}
       <div className="px-4 pb-6">
         <div className="rounded-xl bg-white/5 border border-white/10 p-4">
-          <div className="flex items-center gap-2 text-green-400 text-sm font-medium">
-            <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+          <div className="flex items-center gap-2 text-sm font-medium" style={{color: '#5BC4B1'}}>
+            <span className="w-2 h-2 rounded-full" style={{background: '#5BC4B1'}}></span>
             Secure
           </div>
           <p className="text-xs text-white/60 mt-1">
