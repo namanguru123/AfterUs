@@ -47,7 +47,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-6 space-y-1 flex-col overflow-y-auto">
+      <nav className="flex-1 flex flex-col px-3 py-6 space-y-1 overflow-y-auto">
         {navItems.map(({ name, path, icon: Icon }) => (
             <NavLink
               key={name}
@@ -58,11 +58,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                   onClose();
                 }
               }}
-              className="flex items-center gap-3 h-10 md:h-8 px-4 mx-1 rounded-xl whitespace-nowrap transition-all"
-              style={({ isActive }) =>
-                isActive
-                  ? { background: 'rgba(93,183,232,0.25)', color: '#5DB7E8', boxShadow: '0 2px 8px rgba(93,183,232,0.2)' }
-                  : { color: 'rgba(255,255,255,0.65)' }
+              className={({ isActive }) =>
+                `flex items-center gap-3 h-10 md:h-8 px-4 mx-1 rounded-xl whitespace-nowrap transition-all ${
+                  isActive
+                    ? 'bg-[#5DB7E8]/25 text-[#5DB7E8] shadow-[0_2px_8px_rgba(93,183,232,0.2)]'
+                    : 'text-white/65 hover:text-white hover:bg-white/5'
+                }`
               }
             >
 
