@@ -1,4 +1,4 @@
-name: AfterUs CI Pipeline
+name: AfterUs CI
 
 on:
   pull_request:
