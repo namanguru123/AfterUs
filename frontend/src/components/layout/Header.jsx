@@ -1,5 +1,5 @@
 import "./Header.css"
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo_au.png"
 import { Link } from "react-router-dom"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"

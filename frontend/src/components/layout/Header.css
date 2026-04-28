@@ -4,11 +4,14 @@
 
 .landing-header {
   background: #ffffff;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   min-height: 70px;
   padding-top: 0.5rem;
-  z-index: 50;
+  z-index: 1000;
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
@@ -44,45 +47,33 @@
 }
 
 .navbar-logo-icon {
-  height: 32px;
   display: flex;
   align-items: center;
-}
-.navbar-logo-icon img {
   height: 100%;
-  width: auto;
-  object-fit: contain;
 }
 
-
-/* Ensure logo fits within the navbar container */
-.navbar-logo {
-  max-height: 100%;
-
-}
-
-.navbar-logo-icon,
-.navbar-logo img,
 .navbar-logo-icon img {
-  max-height: 150px;
   width: auto;
   height: auto;
+  max-height: 50px;
+  max-width: 180px;
+  object-fit: contain;
   display: block;
 }
 
-@media (max-width: 1024px) {
-  .navbar-logo-icon,
-  .navbar-logo img,
+
+/* Responsive logo sizing */
+@media (max-width: 768px) {
   .navbar-logo-icon img {
     max-height: 44px;
+    max-width: 150px;
   }
 }
 
 @media (max-width: 480px) {
-  .navbar-logo-icon,
-  .navbar-logo img,
   .navbar-logo-icon img {
     max-height: 36px;
+    max-width: 120px;
   }
 }
 /* =====================

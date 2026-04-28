@@ -114,31 +114,30 @@ export default function Hero() {
                See how it works
             </motion.button>
           </motion.div>
+          <motion.div
+            {...fadeInUp}
+            transition={{ ...fadeInUp.transition, delay: 0.25 }}
+            className="hero-trust-row"
+          >
+            <motion.div
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="trust-item"
+            >
+              <span className="trust-dot"></span>
+              <span>End-to-end encrypted</span>
+            </motion.div>
+
+            <motion.div
+              animate={{ x: [0, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}
+              className="trust-item"
+            >
+              <span className="trust-dot"></span>
+              <span>Zero-knowledge architecture</span>
+            </motion.div>
+          </motion.div>
         </div>
-
-        <motion.div
-          {...fadeInUp}
-          transition={{ ...fadeInUp.transition, delay: 0.25 }}
-          className="hero-trust-row"
-        >
-          <motion.div
-            animate={{ x: [0, 5, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="trust-item"
-          >
-            <span className="trust-dot"></span>
-            <span>End-to-end encrypted</span>
-          </motion.div>
-
-          <motion.div
-            animate={{ x: [0, -5, 0] }}
-            transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}
-            className="trust-item"
-          >
-            <span className="trust-dot"></span>
-            <span>Zero-knowledge architecture</span>
-          </motion.div>
-        </motion.div>
 
         {/* RIGHT */}
         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end mt-8 lg:mt-5 relative">

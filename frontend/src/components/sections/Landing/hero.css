@@ -159,7 +159,6 @@
   padding: 26px;
   border-radius: 18px;
   box-shadow: 0 40px 90px rgba(15, 23, 42, 0.12);
-  transform: translateY(100px);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(220,226,230,0.9);
   width: 100%;
@@ -176,13 +175,11 @@
 
 /* position the card visually centered on the right column to match design */
 .hero-section .hero-card {
-  position: absolute;
-  right: 56px;
-  top: 50px;
-  width: 480px;
-  padding: 28px;
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
 }
-
 
 .mini-card {
   display: flex;
@@ -284,10 +281,24 @@
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .hero-section .hero-card { position: relative; right: auto; top: auto; width: 100%; transform: translateY(-6px); margin-top: 2rem; }
   .hero-section { padding-left: 2rem; padding-right: 2rem; }
+  .hero-section .hero-card {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: 100%;
+    max-width: 420px;
+    margin: 2rem auto 0;
+  }
 }
 
 @media (max-width: 768px) {
   .hero-section { padding-left: 1rem; padding-right: 1rem; min-height: auto; }
+  .hero-section .hero-card {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 2rem;
+    transform: none;
+  }
 }
