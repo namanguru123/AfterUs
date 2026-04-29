@@ -28,6 +28,8 @@ export const revealSensitiveData = async (req, res) => {
       isRevoked: false,
     });
 
+    console.log("REVEALING DATA - Rule found:", !!rule, "for assetId:", assetId);
+
     if (!rule) {
       return res.status(403).json({ message: "Access denied" });
     }
