@@ -13,7 +13,7 @@ export const revealSensitiveData = async (req, res) => {
 
     const trustedPerson = await TrustedPerson.findOne({
       email: req.user.email,
-      status: "VERIFIED",
+      // status: "VERIFIED",
       isDeleted: false,
     });
 
